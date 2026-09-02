@@ -5,8 +5,7 @@ Navegue por faixas populares, busque músicas, veja detalhes, marque **Favoritos
 
 > Projeto Somativo da disciplina **Desenvolvimento Mobile Híbrido** (BSI) — Prof. Mark Joselli.
 
-<!-- Substituir pelos badges reais após configurar o CI -->
-<!-- ![CI](https://github.com/rdsalvesPUC/dataaudio/actions/workflows/ci.yml/badge.svg) -->
+[![CI](https://github.com/rdsalvesPUC/dataaudio/actions/workflows/ci.yml/badge.svg)](https://github.com/rdsalvesPUC/dataaudio/actions/workflows/ci.yml)
 
 ---
 
@@ -38,8 +37,12 @@ Navegue por faixas populares, busque músicas, veja detalhes, marque **Favoritos
 
 ## Screenshots
 
-<!-- Adicionar após a implementação: login, catálogo, detalhes, favoritos, ouvidas -->
-_Em breve._
+**Catálogo (RF01)** — grade paginada com dados reais da Deezer:
+
+<img src="docs/screenshots/catalog.png" alt="Tela de catálogo do DataAudio" width="280">
+
+<!-- Adicionar conforme implementadas: login, detalhes, favoritos, ouvidas -->
+_Demais telas em breve, à medida que os RF forem implementados._
 
 ## Stack
 
@@ -135,18 +138,26 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 
 | RF | Requisito | Status | Arquivo principal |
 |---|---|---|---|
-| RF01 | Catálogo e paginação | ⬜ | `lib/views/catalog/catalog_view.dart` |
+| RF01 | Catálogo e paginação | ✅ | `lib/views/catalog/catalog_view.dart` |
 | RF02 | Navegação para detalhes | ⬜ | `lib/core/navigation/app_routes.dart` |
 | RF03 | Tela de detalhes | ⬜ | `lib/views/detail/track_detail_view.dart` |
 | RF04 | Favoritos com Provider | ⬜ | `lib/providers/favorites_provider.dart` |
 | RF05 | Tela de favoritos | ⬜ | `lib/views/favorites/favorites_view.dart` |
 | RF06 | Persistência de dados | ⬜ | `lib/repositories/local_favorites_repository.dart` |
 | RF07 | Login e itens ouvidos | ⬜ | `lib/providers/auth_provider.dart` |
-| RF08 | Busca | ⬜ | `lib/services/deezer_service.dart` |
-| RF09 | Feedback de UI | ⬜ | `lib/widgets/error_view.dart` |
-| RF10 | Acessibilidade | ⬜ | `lib/core/theme/app_theme.dart` |
+| RF08 | Busca | 🟨 | `lib/services/deezer_service.dart` (serviço pronto; falta a tela) |
+| RF09 | Feedback de UI | 🟨 | `lib/widgets/error_view.dart` (aplicado no catálogo) |
+| RF10 | Acessibilidade | 🟨 | `lib/widgets/app_network_image.dart` (Semantics + adaptive + tema) |
 
 _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a implementação avança._
+
+**Fundação (PF01 tema / PF02 i18n):** infraestrutura embutida desde o início — temas Material 3 claro/escuro ([`app_theme.dart`](lib/core/theme/app_theme.dart)) e traduções PT-BR/EN gerando `AppLocalizations` ([`lib/l10n/`](lib/l10n/)). As telas de ajuste manual entram com o `SettingsProvider`.
+
+### Status geral
+
+- ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
+- ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
+- ✅ **22 testes** verdes; `flutter analyze` sem issues.
 
 ## Documentação
 
