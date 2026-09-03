@@ -107,6 +107,21 @@ unlinked_spec.ds
 # Coverage
 coverage/
 
+# IDE (IntelliJ / Android Studio)
+.idea/
+*.iml
+
+# Diretorio residual de saidas de ferramentas (nao faz parte do projeto)
+/mnt/
+
+# DataAudio - segredos do Firebase (bonus), nunca versionar (PRD RNF Seguranca)
+**/firebase_options.dart
+**/google-services.json
+**/GoogleService-Info.plist
+.firebase/
+firebase.json
+.firebaserc
+
 # Symbols
 app.*.symbols
 

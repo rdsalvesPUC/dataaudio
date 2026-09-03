@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "appTitle": "DataAudio",
+  "navCatalog": "Catalog",
+  "navFavorites": "Favorites",
+  "navListened": "Listened",
+  "navSettings": "Settings",
+  "loadMore": "Load more",
+  "searchHint": "Search tracks",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "errorNetwork": "No connection. Check your internet.",
+  "errorNotFound": "Nothing found.",
+  "retry": "Try again"
+}
