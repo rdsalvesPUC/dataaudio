@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Necessaria em release: catalogo e capas vem da Deezer via rede.
+         Os manifestos de debug/profile ja a declaram; o principal precisa
+         dela para o APK de release. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="dataaudio"
         android:name="${applicationName}"
