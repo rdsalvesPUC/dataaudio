@@ -1,0 +1,47 @@
+{
+  "@@locale": "pt",
+  "appTitle": "DataAudio",
+  "@appTitle": {
+    "description": "Nome do aplicativo, exibido na barra de titulo."
+  },
+  "navCatalog": "Catalogo",
+  "@navCatalog": {
+    "description": "Rotulo da aba de catalogo."
+  },
+  "navFavorites": "Favoritos",
+  "@navFavorites": {
+    "description": "Rotulo da aba de favoritos."
+  },
+  "navListened": "Ouvidas",
+  "@navListened": {
+    "description": "Rotulo da aba de faixas ouvidas."
+  },
+  "navSettings": "Ajustes",
+  "@navSettings": {
+    "description": "Rotulo da aba de ajustes."
+  },
+  "loadMore": "Carregar mais",
+  "@loadMore": {
+    "description": "Botao que anexa a proxima pagina do catalogo (RF01)."
+  },
+  "searchHint": "Buscar faixas",
+  "@searchHint": {
+    "description": "Placeholder do campo de busca (RF08)."
+  },
+  "errorGeneric": "Algo deu errado. Tente novamente.",
+  "@errorGeneric": {
+    "description": "Mensagem de erro generica (RF09)."
+  },
+  "errorNetwork": "Sem conexao. Verifique sua internet.",
+  "@errorNetwork": {
+    "description": "Erro de rede (RF09)."
+  },
+  "errorNotFound": "Nada encontrado.",
+  "@errorNotFound": {
+    "description": "Recurso nao encontrado (busca sem resultado, RF08/RF09)."
+  },
+  "retry": "Tentar novamente",
+  "@retry": {
+    "description": "Botao para repetir uma operacao que falhou (RF09)."
+  }
+}
