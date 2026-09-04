@@ -175,6 +175,24 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Duração'**
   String get detailDuration;
+
+  /// Estado vazio da tela de favoritos (RF05).
+  ///
+  /// In pt, this message translates to:
+  /// **'Você ainda não tem favoritos.'**
+  String get favoritesEmpty;
+
+  /// Rotulo de acessibilidade do botao ao favoritar (RF04/RF10).
+  ///
+  /// In pt, this message translates to:
+  /// **'Adicionar aos favoritos'**
+  String get favoriteAdd;
+
+  /// Rotulo de acessibilidade do botao ao desfavoritar (RF04/RF10).
+  ///
+  /// In pt, this message translates to:
+  /// **'Remover dos favoritos'**
+  String get favoriteRemove;
 }
 
 class _AppLocalizationsDelegate

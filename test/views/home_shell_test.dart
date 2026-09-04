@@ -2,7 +2,9 @@ import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/models/track_page.dart';
 import 'package:dataaudio/providers/catalog_provider.dart';
+import 'package:dataaudio/providers/favorites_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
+import 'package:dataaudio/repositories/favorites_repository.dart';
 import 'package:dataaudio/views/home/home_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +12,16 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 class _MockCatalogRepository extends Mock implements CatalogRepository {}
+
+class _FakeFavoritesRepository implements FavoritesRepository {
+  final List<Track> _items = [];
+  @override
+  Future<void> add(Track track) async => _items.add(track);
+  @override
+  Future<List<Track>> getAll() async => List.of(_items);
+  @override
+  Future<void> remove(String id) async => _items.removeWhere((t) => t.id == id);
+}
 
 Track _track(String id) => Track(
       id: id,
@@ -32,22 +44,27 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('en'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: ChangeNotifierProvider<CatalogProvider>(
-          create: (_) => CatalogProvider(repo),
-          child: const HomeShell(),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => CatalogProvider(repo)),
+          ChangeNotifierProvider(
+            create: (_) => FavoritesProvider(_FakeFavoritesRepository()),
+          ),
+        ],
+        child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const HomeShell(),
         ),
       ),
     );
     await tester.pumpAndSettle();
 
-    // Act: vai para Favoritos e volta para o Catalogo
-    await tester.tap(find.byIcon(Icons.favorite_border));
+    // Act: vai para Favoritos e volta para o Catalogo (pelos rotulos das abas)
+    await tester.tap(find.text('Favorites'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.library_music_outlined));
+    await tester.tap(find.text('Catalog'));
     await tester.pumpAndSettle();
 
     // Assert: loadInitial rodou UMA vez so (a view nao foi recriada)

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/error/failure_mapper.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/track.dart';
+import '../../providers/favorites_provider.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../widgets/app_network_image.dart';
 import '../../widgets/error_view.dart';
@@ -39,8 +40,20 @@ class _TrackDetailViewState extends State<TrackDetailView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isFavorite =
+        context.watch<FavoritesProvider>().isFavorite(widget.track.id);
     return Scaffold(
-      appBar: AppBar(title: Text(widget.track.title)),
+      appBar: AppBar(
+        title: Text(widget.track.title),
+        actions: [
+          IconButton(
+            icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+            tooltip: isFavorite ? l10n.favoriteRemove : l10n.favoriteAdd,
+            onPressed: () =>
+                context.read<FavoritesProvider>().toggle(widget.track),
+          ),
+        ],
+      ),
       body: FutureBuilder<Track>(
         future: _future,
         builder: (context, snapshot) {

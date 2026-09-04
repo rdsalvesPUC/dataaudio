@@ -12,5 +12,8 @@
   "errorNotFound": "Nothing found.",
   "retry": "Try again",
   "detailAlbum": "Album",
-  "detailDuration": "Duration"
+  "detailDuration": "Duration",
+  "favoritesEmpty": "You have no favorites yet.",
+  "favoriteAdd": "Add to favorites",
+  "favoriteRemove": "Remove from favorites"
 }
