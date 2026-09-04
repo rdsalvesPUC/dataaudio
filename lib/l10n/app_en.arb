@@ -10,5 +10,7 @@
   "errorGeneric": "Something went wrong. Please try again.",
   "errorNetwork": "No connection. Check your internet.",
   "errorNotFound": "Nothing found.",
-  "retry": "Try again"
+  "retry": "Try again",
+  "detailAlbum": "Album",
+  "detailDuration": "Duration"
 }

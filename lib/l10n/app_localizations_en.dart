@@ -41,4 +41,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Try again';
+
+  @override
+  String get detailAlbum => 'Album';
+
+  @override
+  String get detailDuration => 'Duration';
 }

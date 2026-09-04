@@ -163,6 +163,18 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Tentar novamente'**
   String get retry;
+
+  /// Rotulo do campo album na tela de detalhe (RF03).
+  ///
+  /// In pt, this message translates to:
+  /// **'Álbum'**
+  String get detailAlbum;
+
+  /// Rotulo do campo duracao na tela de detalhe (RF03).
+  ///
+  /// In pt, this message translates to:
+  /// **'Duração'**
+  String get detailDuration;
 }
 
 class _AppLocalizationsDelegate
