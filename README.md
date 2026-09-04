@@ -37,11 +37,11 @@ Navegue por faixas populares, busque músicas, veja detalhes, marque **Favoritos
 
 ## Screenshots
 
-| Catálogo (RF01) | Detalhes (RF02/RF03) |
-|:---:|:---:|
-| <img src="docs/screenshots/catalog.png" alt="Tela de catálogo do DataAudio" width="260"> | <img src="docs/screenshots/detail.png" alt="Tela de detalhes de uma faixa" width="260"> |
+| Catálogo (RF01) | Detalhes (RF02/RF03) | Favoritos (RF04/RF05) |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/catalog.png" alt="Tela de catálogo do DataAudio" width="240"> | <img src="docs/screenshots/detail.png" alt="Tela de detalhes de uma faixa" width="240"> | <img src="docs/screenshots/favorites.png" alt="Tela de favoritos" width="240"> |
 
-<!-- Adicionar conforme implementadas: login, favoritos, ouvidas -->
+<!-- Adicionar conforme implementadas: login, ouvidas -->
 _Demais telas em breve, à medida que os RF forem implementados._
 
 ## Stack
@@ -141,9 +141,9 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 | RF01 | Catálogo e paginação | ✅ | `lib/views/catalog/catalog_view.dart` |
 | RF02 | Navegação para detalhes | ✅ | `lib/core/navigation/app_routes.dart` |
 | RF03 | Tela de detalhes | ✅ | `lib/views/detail/track_detail_view.dart` |
-| RF04 | Favoritos com Provider | ⬜ | `lib/providers/favorites_provider.dart` |
-| RF05 | Tela de favoritos | ⬜ | `lib/views/favorites/favorites_view.dart` |
-| RF06 | Persistência de dados | ⬜ | `lib/repositories/local_favorites_repository.dart` |
+| RF04 | Favoritos com Provider | ✅ | `lib/providers/favorites_provider.dart` |
+| RF05 | Tela de favoritos | ✅ | `lib/views/favorites/favorites_view.dart` |
+| RF06 | Persistência de dados | 🟨 | `lib/repositories/local_favorites_repository.dart` (favoritos ✅; ouvidas com RF07) |
 | RF07 | Login e itens ouvidos | ⬜ | `lib/providers/auth_provider.dart` |
 | RF08 | Busca | 🟨 | `lib/services/deezer_service.dart` (serviço pronto; falta a tela) |
 | RF09 | Feedback de UI | 🟨 | `lib/widgets/error_view.dart` (aplicado no catálogo) |
@@ -157,7 +157,7 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **29 testes** verdes; `flutter analyze` sem issues.
+- ✅ **43 testes** verdes; `flutter analyze` sem issues.
 
 ## Documentação
 

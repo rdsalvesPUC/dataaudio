@@ -51,5 +51,17 @@
   "detailDuration": "Duração",
   "@detailDuration": {
     "description": "Rotulo do campo duracao na tela de detalhe (RF03)."
+  },
+  "favoritesEmpty": "Você ainda não tem favoritos.",
+  "@favoritesEmpty": {
+    "description": "Estado vazio da tela de favoritos (RF05)."
+  },
+  "favoriteAdd": "Adicionar aos favoritos",
+  "@favoriteAdd": {
+    "description": "Rotulo de acessibilidade do botao ao favoritar (RF04/RF10)."
+  },
+  "favoriteRemove": "Remover dos favoritos",
+  "@favoriteRemove": {
+    "description": "Rotulo de acessibilidade do botao ao desfavoritar (RF04/RF10)."
   }
 }

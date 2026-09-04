@@ -6,7 +6,9 @@ import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/models/track_page.dart';
 import 'package:dataaudio/providers/catalog_provider.dart';
+import 'package:dataaudio/providers/favorites_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
+import 'package:dataaudio/repositories/favorites_repository.dart';
 import 'package:dataaudio/views/detail/track_detail_view.dart';
 import 'package:dataaudio/widgets/error_view.dart';
 import 'package:dataaudio/widgets/loading_indicator.dart';
@@ -18,6 +20,22 @@ import 'package:provider/provider.dart';
 
 class _MockCatalogRepository extends Mock implements CatalogRepository {}
 
+/// Favoritos em memoria — evita mock/stub para os testes de UP do detalhe.
+class _FakeFavoritesRepository implements FavoritesRepository {
+  final List<Track> _items = [];
+  @override
+  Future<void> add(Track track) async {
+    if (!_items.any((t) => t.id == track.id)) _items.add(track);
+  }
+
+  @override
+  Future<List<Track>> getAll() async => List.of(_items);
+
+  @override
+  Future<void> remove(String id) async =>
+      _items.removeWhere((t) => t.id == id);
+}
+
 Track _fullTrack() => const Track(
       id: '1',
       title: 'Harder Better',
@@ -28,12 +46,22 @@ Track _fullTrack() => const Track(
       durationSeconds: 224,
     );
 
-Widget _wrapDetail(Track track, CatalogRepository repo) => MaterialApp(
+Widget _wrapDetail(
+  Track track,
+  CatalogRepository repo, {
+  FavoritesProvider? favorites,
+}) =>
+    MaterialApp(
       locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Provider<CatalogRepository>.value(
-        value: repo,
+      home: MultiProvider(
+        providers: [
+          Provider<CatalogRepository>.value(value: repo),
+          ChangeNotifierProvider<FavoritesProvider>.value(
+            value: favorites ?? FavoritesProvider(_FakeFavoritesRepository()),
+          ),
+        ],
         child: TrackDetailView(track: track),
       ),
     );
@@ -131,6 +159,9 @@ void main() {
           providers: [
             Provider<CatalogRepository>.value(value: repo),
             ChangeNotifierProvider(create: (_) => CatalogProvider(repo)),
+            ChangeNotifierProvider(
+              create: (_) => FavoritesProvider(_FakeFavoritesRepository()),
+            ),
           ],
           child: MaterialApp(
             locale: const Locale('en'),
@@ -151,6 +182,39 @@ void main() {
       // Assert
       expect(find.byType(TrackDetailView), findsOneWidget);
       expect(find.text('Discovery'), findsOneWidget); // detalhe renderizado
+    });
+  });
+
+  group('Favoritar no detalhe (RF04)', () {
+    testWidgets('o coracao alterna o favorito e reflete no provider',
+        (tester) async {
+      // Arrange
+      final track = _fullTrack();
+      when(() => repo.trackDetail('1')).thenAnswer((_) async => track);
+      final favorites = FavoritesProvider(_FakeFavoritesRepository());
+
+      await tester.pumpWidget(_wrapDetail(track, repo, favorites: favorites));
+      await tester.pumpAndSettle();
+
+      // Comeca como nao-favorito
+      expect(find.byIcon(Icons.favorite_border), findsOneWidget);
+      expect(favorites.isFavorite('1'), isFalse);
+
+      // Act: toca no coracao
+      await tester.tap(find.byIcon(Icons.favorite_border));
+      await tester.pumpAndSettle();
+
+      // Assert: vira favorito (icone cheio) e reflete no provider
+      expect(favorites.isFavorite('1'), isTrue);
+      expect(find.byIcon(Icons.favorite), findsOneWidget);
+
+      // Act: toca de novo para desfavoritar
+      await tester.tap(find.byIcon(Icons.favorite));
+      await tester.pumpAndSettle();
+
+      // Assert: volta a nao-favorito
+      expect(favorites.isFavorite('1'), isFalse);
+      expect(find.byIcon(Icons.favorite_border), findsOneWidget);
     });
   });
 }
