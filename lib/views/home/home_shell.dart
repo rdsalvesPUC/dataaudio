@@ -36,7 +36,9 @@ class _HomeShellState extends State<HomeShell> {
 
     return Scaffold(
       appBar: AppBar(title: Text(titles[_index])),
-      body: pages[_index],
+      // IndexedStack mantem todas as abas vivas: trocar de aba nao descarta a
+      // CatalogView (preserva paginas carregadas e posicao de scroll).
+      body: IndexedStack(index: _index, children: pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (i) => setState(() => _index = i),
