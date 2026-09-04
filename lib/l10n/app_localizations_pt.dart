@@ -41,4 +41,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get retry => 'Tentar novamente';
+
+  @override
+  String get detailAlbum => 'Álbum';
+
+  @override
+  String get detailDuration => 'Duração';
 }

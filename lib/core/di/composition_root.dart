@@ -36,6 +36,9 @@ class _CompositionRootState extends State<CompositionRoot> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        // Repositorio exposto para leituras pontuais via FutureBuilder
+        // (ex.: a tela de detalhe, RF03/ADR-0003).
+        Provider<CatalogRepository>.value(value: _catalogRepository),
         ChangeNotifierProvider(
           create: (_) => CatalogProvider(_catalogRepository),
         ),
