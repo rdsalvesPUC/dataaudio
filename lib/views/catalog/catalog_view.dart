@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/error/failure_mapper.dart';
+import '../../core/navigation/app_routes.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/catalog_provider.dart';
 import '../../widgets/error_view.dart';
@@ -65,7 +66,12 @@ class _CatalogViewState extends State<CatalogView> {
             onPressed: catalog.loadMore,
           );
         }
-        return TrackGridItem(track: catalog.tracks[index]);
+        final track = catalog.tracks[index];
+        return TrackGridItem(
+          track: track,
+          onTap: () => Navigator.of(context)
+              .pushNamed(AppRoutes.detail, arguments: track),
+        );
       },
     );
   }
