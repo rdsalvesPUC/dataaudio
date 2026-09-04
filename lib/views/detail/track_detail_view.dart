@@ -26,14 +26,23 @@ class TrackDetailView extends StatefulWidget {
 class _TrackDetailViewState extends State<TrackDetailView> {
   late Future<Track> _future;
 
+  /// Faixa mais completa disponivel: comeca com o argumento da rota (parcial,
+  /// vindo do catalogo/busca) e passa a ser o detalhe resolvido pelo
+  /// `trackDetail`. E ela que favoritamos, para persistir os dados completos.
+  late Track _current = widget.track;
+
   @override
   void initState() {
     super.initState();
     _future = _load();
   }
 
-  Future<Track> _load() =>
-      context.read<CatalogRepository>().trackDetail(widget.track.id);
+  Future<Track> _load() async {
+    final resolved =
+        await context.read<CatalogRepository>().trackDetail(widget.track.id);
+    if (mounted) setState(() => _current = resolved);
+    return resolved;
+  }
 
   void _reload() => setState(() => _future = _load());
 
@@ -41,7 +50,7 @@ class _TrackDetailViewState extends State<TrackDetailView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isFavorite =
-        context.watch<FavoritesProvider>().isFavorite(widget.track.id);
+        context.watch<FavoritesProvider>().isFavorite(_current.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.track.title),
@@ -50,7 +59,7 @@ class _TrackDetailViewState extends State<TrackDetailView> {
             icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
             tooltip: isFavorite ? l10n.favoriteRemove : l10n.favoriteAdd,
             onPressed: () =>
-                context.read<FavoritesProvider>().toggle(widget.track),
+                context.read<FavoritesProvider>().toggle(_current),
           ),
         ],
       ),
