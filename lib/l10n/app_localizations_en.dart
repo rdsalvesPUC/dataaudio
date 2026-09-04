@@ -47,4 +47,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get detailDuration => 'Duration';
+
+  @override
+  String get favoritesEmpty => 'You have no favorites yet.';
+
+  @override
+  String get favoriteAdd => 'Add to favorites';
+
+  @override
+  String get favoriteRemove => 'Remove from favorites';
 }

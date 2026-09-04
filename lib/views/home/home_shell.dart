@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../catalog/catalog_view.dart';
+import '../favorites/favorites_view.dart';
 
 /// Casca principal com navegacao por abas: catalogo / favoritos / ouvidas /
 /// ajustes (SDD §7). Por ora so o catalogo (RF01) esta implementado; as demais
@@ -22,7 +23,7 @@ class _HomeShellState extends State<HomeShell> {
 
     final pages = <Widget>[
       const CatalogView(),
-      _Placeholder(label: l10n.navFavorites),
+      const FavoritesView(),
       _Placeholder(label: l10n.navListened),
       _Placeholder(label: l10n.navSettings),
     ];
