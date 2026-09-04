@@ -73,4 +73,27 @@ void main() {
     expect(find.byType(ErrorView), findsOneWidget);
     expect(find.text('No connection. Check your internet.'), findsOneWidget);
   });
+
+  testWidgets('RF09: falha no loadMore mostra erro + retry no tile (Codex #4)',
+      (tester) async {
+    // Arrange: primeira pagina OK, com mais paginas disponiveis
+    when(() => repo.loadChart(index: 0, limit: any(named: 'limit'))).thenAnswer(
+      (_) async => TrackPage(tracks: [_track('1')], hasMore: true),
+    );
+    await tester.pumpWidget(_wrap(CatalogProvider(repo)));
+    await tester.pumpAndSettle();
+    expect(find.text('Load more'), findsOneWidget);
+
+    // Act: a proxima pagina falha
+    when(() => repo.loadChart(index: 1, limit: any(named: 'limit')))
+        .thenThrow(const NetworkException());
+    await tester.tap(find.text('Load more'));
+    await tester.pumpAndSettle();
+
+    // Assert: o erro aparece no proprio tile, com botao de tentar novamente
+    expect(find.text('No connection. Check your internet.'), findsOneWidget);
+    expect(find.text('Try again'), findsOneWidget);
+    // a lista ja carregada permanece (RN05)
+    expect(find.byType(TrackGridItem), findsOneWidget);
+  });
 }
