@@ -47,4 +47,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get detailDuration => 'Duração';
+
+  @override
+  String get favoritesEmpty => 'Você ainda não tem favoritos.';
+
+  @override
+  String get favoriteAdd => 'Adicionar aos favoritos';
+
+  @override
+  String get favoriteRemove => 'Remover dos favoritos';
 }
