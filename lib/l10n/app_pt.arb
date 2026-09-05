@@ -111,5 +111,13 @@
   "listenedUnmark": "Desmarcar ouvida",
   "@listenedUnmark": {
     "description": "Rotulo de acessibilidade ao desmarcar ouvida (RF07/RF10)."
+  },
+  "searchButton": "Buscar",
+  "@searchButton": {
+    "description": "Botao/titulo da busca (RF08)."
+  },
+  "searchPrompt": "Busque por faixas e artistas.",
+  "@searchPrompt": {
+    "description": "Estado inicial da tela de busca, antes de pesquisar (RF08)."
   }
 }

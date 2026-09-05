@@ -27,5 +27,7 @@
   "logout": "Log out",
   "listenedEmpty": "You haven't marked anything as listened yet.",
   "listenedMark": "Mark as listened",
-  "listenedUnmark": "Unmark listened"
+  "listenedUnmark": "Unmark listened",
+  "searchButton": "Search",
+  "searchPrompt": "Search for tracks and artists."
 }

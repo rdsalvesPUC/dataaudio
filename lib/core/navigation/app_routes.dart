@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../views/detail/track_detail_view.dart';
 import '../../views/home/home_shell.dart';
 import '../../views/login/login_view.dart';
+import '../../views/search/search_view.dart';
 
 /// Rotas nomeadas + `onGenerateRoute` (Navigator 1.0, ADR-0007). O app inicia
 /// no login (guarda de acesso, RN01); login/logout usam `pushReplacement`.
@@ -14,6 +15,7 @@ abstract final class AppRoutes {
   static const String login = '/';
   static const String home = '/home';
   static const String detail = '/detail';
+  static const String search = '/search';
 
   static const String initial = login;
 
@@ -26,6 +28,8 @@ abstract final class AppRoutes {
         );
       case home:
         return _guarded(settings, (_) => const HomeShell());
+      case search:
+        return _guarded(settings, (_) => const SearchView());
       case detail:
         // RF02: a faixa selecionada vem como argumento da rota.
         final args = settings.arguments;

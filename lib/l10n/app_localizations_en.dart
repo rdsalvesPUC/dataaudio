@@ -92,4 +92,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listenedUnmark => 'Unmark listened';
+
+  @override
+  String get searchButton => 'Search';
+
+  @override
+  String get searchPrompt => 'Search for tracks and artists.';
 }
