@@ -159,7 +159,7 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **72 testes** verdes; `flutter analyze` sem issues.
+- ✅ **75 testes** verdes; `flutter analyze` sem issues.
 
 ## Documentação
 

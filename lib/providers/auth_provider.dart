@@ -23,9 +23,16 @@ class AuthProvider extends ChangeNotifier {
   Future<void> restoreSession() async {
     _restoring = true;
     notifyListeners();
-    _user = await _repository.currentSession();
-    _restoring = false;
-    notifyListeners();
+    try {
+      _user = await _repository.currentSession();
+    } catch (_) {
+      // Sessao persistida invalida/corrompida ou falha de storage: descarta e
+      // segue deslogado, em vez de travar o app no spinner (Codex P2).
+      _user = null;
+    } finally {
+      _restoring = false;
+      notifyListeners();
+    }
   }
 
   Future<void> login(String username, String password) async {
