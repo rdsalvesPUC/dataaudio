@@ -75,4 +75,21 @@ void main() {
     expect(provider.isFavorite('9'), isTrue); // ja refletiu
     await future;
   });
+
+  test('load tolera falha do repositorio: nao trava e fica vazio (RF09)',
+      () async {
+    when(() => repo.getAll()).thenThrow(Exception('storage corrompido'));
+
+    await provider.load(); // nao deve lancar
+
+    expect(provider.isEmpty, isTrue);
+  });
+
+  test('toggle reverte quando a persistencia falha (RF09)', () async {
+    when(() => repo.add(any())).thenThrow(Exception('falha ao gravar'));
+
+    await provider.toggle(_track('1')); // nao deve lancar
+
+    expect(provider.isFavorite('1'), isFalse); // otimista revertido
+  });
 }

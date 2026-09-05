@@ -1,8 +1,12 @@
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/providers/listened_provider.dart';
+import 'package:dataaudio/repositories/listened_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../support/fakes.dart';
+
+class _MockListenedRepository extends Mock implements ListenedRepository {}
 
 Track _track(String id) => Track(
       id: id,
@@ -39,5 +43,30 @@ void main() {
     provider.addListener(() => notified++);
     await provider.toggle(_track('1'));
     expect(notified, greaterThanOrEqualTo(1));
+  });
+
+  group('robustez (RF09, sem travar)', () {
+    setUpAll(() => registerFallbackValue(_track('0')));
+
+    test('load tolera falha do repositorio e fica vazio', () async {
+      final repo = _MockListenedRepository();
+      when(() => repo.getAll()).thenThrow(Exception('storage corrompido'));
+      final provider = ListenedProvider(repo);
+
+      await provider.load(); // nao deve lancar
+
+      expect(provider.isEmpty, isTrue);
+    });
+
+    test('toggle reverte quando a persistencia falha', () async {
+      final repo = _MockListenedRepository();
+      when(() => repo.getAll()).thenAnswer((_) async => const []);
+      when(() => repo.add(any())).thenThrow(Exception('falha ao gravar'));
+      final provider = ListenedProvider(repo);
+
+      await provider.toggle(_track('1')); // nao deve lancar
+
+      expect(provider.isListened('1'), isFalse); // otimista revertido
+    });
   });
 }
