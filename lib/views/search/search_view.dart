@@ -31,6 +31,11 @@ class _SearchViewState extends State<SearchView> {
   Object? _error;
   List<Track> _results = const [];
 
+  /// Identifica a busca atual: respostas de buscas anteriores (obsoletas) sao
+  /// descartadas quando uma nova e disparada (evita que uma resposta lenta
+  /// sobrescreva o resultado de uma query mais recente).
+  int _requestId = 0;
+
   @override
   void dispose() {
     _controller.dispose();
@@ -41,6 +46,7 @@ class _SearchViewState extends State<SearchView> {
     final query = _controller.text.trim();
     if (query.isEmpty) return;
     final repository = context.read<CatalogRepository>();
+    final requestId = ++_requestId;
     setState(() {
       _searched = true;
       _loading = true;
@@ -48,13 +54,13 @@ class _SearchViewState extends State<SearchView> {
     });
     try {
       final page = await repository.search(query);
-      if (!mounted) return;
+      if (!mounted || requestId != _requestId) return; // resposta obsoleta
       setState(() {
         _results = page.tracks;
         _loading = false;
       });
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted || requestId != _requestId) return; // resposta obsoleta
       setState(() {
         _error = e;
         _loading = false;
