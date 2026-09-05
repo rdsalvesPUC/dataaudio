@@ -148,7 +148,7 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 | RF06 | Persistência de dados | ✅ | `lib/repositories/local_favorites_repository.dart` + `local_listened_repository.dart` |
 | RF07 | Login e itens ouvidos | ✅ | `lib/providers/auth_provider.dart` |
 | RF08 | Busca | ✅ | `lib/views/search/search_view.dart` |
-| RF09 | Feedback de UI | 🟨 | `lib/widgets/error_view.dart` (aplicado no catálogo) |
+| RF09 | Feedback de UI | ✅ | `lib/widgets/loading_indicator.dart` + `error_view.dart` (loading/erro em catálogo, detalhe, busca e login; providers não travam) |
 | RF10 | Acessibilidade | 🟨 | `lib/widgets/app_network_image.dart` (Semantics + adaptive + tema) |
 
 _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a implementação avança._
@@ -159,7 +159,7 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **82 testes** verdes; `flutter analyze` sem issues.
+- ✅ **87 testes** verdes; `flutter analyze` sem issues.
 
 ## Documentação
 

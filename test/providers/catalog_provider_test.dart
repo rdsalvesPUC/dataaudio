@@ -66,6 +66,17 @@ void main() {
       expect(provider.tracks, isEmpty);
       expect(provider.isLoading, isFalse);
     });
+
+    test('erro inesperado (nao-AppException) tambem e capturado, sem travar '
+        '(RF09)', () async {
+      when(() => repo.loadChart(index: 0, limit: 2))
+          .thenThrow(Exception('boom'));
+
+      await provider.loadInitial(); // nao deve lancar
+
+      expect(provider.error, isNotNull);
+      expect(provider.isLoading, isFalse);
+    });
   });
 
   group('loadMore (RN05 — estende, nao substitui)', () {

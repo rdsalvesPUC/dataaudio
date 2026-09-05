@@ -18,24 +18,43 @@ class ListenedProvider extends ChangeNotifier {
 
   bool isListened(String id) => _listened.any((t) => t.id == id);
 
+  /// Carrega as ouvidas persistidas. Se o storage falhar, segue com a lista
+  /// vazia (RF09: sem travar).
   Future<void> load() async {
-    final stored = await _repository.getAll();
-    _listened
-      ..clear()
-      ..addAll(stored);
+    try {
+      final stored = await _repository.getAll();
+      _listened
+        ..clear()
+        ..addAll(stored);
+    } catch (_) {
+      // Ignora: melhor uma lista vazia do que um crash na abertura.
+    }
     notifyListeners();
   }
 
-  /// Alterna o estado de "ouvida" de [track] (RF07). Reflete na hora e persiste.
+  /// Alterna o estado de "ouvida" de [track] (RF07). Reflete na hora; se a
+  /// persistencia falhar, reverte para manter memoria e storage consistentes.
   Future<void> toggle(Track track) async {
-    if (isListened(track.id)) {
+    final wasListened = isListened(track.id);
+    if (wasListened) {
       _listened.removeWhere((t) => t.id == track.id);
-      notifyListeners();
-      await _repository.remove(track.id);
     } else {
       _listened.add(track);
+    }
+    notifyListeners();
+    try {
+      if (wasListened) {
+        await _repository.remove(track.id);
+      } else {
+        await _repository.add(track);
+      }
+    } catch (_) {
+      if (wasListened) {
+        _listened.add(track);
+      } else {
+        _listened.removeWhere((t) => t.id == track.id);
+      }
       notifyListeners();
-      await _repository.add(track);
     }
   }
 }
