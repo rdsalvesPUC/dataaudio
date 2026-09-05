@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/providers/favorites_provider.dart';
 import 'package:dataaudio/repositories/favorites_repository.dart';
@@ -91,5 +93,30 @@ void main() {
     await provider.toggle(_track('1')); // nao deve lancar
 
     expect(provider.isFavorite('1'), isFalse); // otimista revertido
+  });
+
+  test('toggles concorrentes na mesma faixa nao duplicam apos rollback '
+      '(Codex P2)', () async {
+    // Comeca como favorito
+    when(() => repo.getAll()).thenAnswer((_) async => [_track('1')]);
+    await provider.load();
+
+    // Toggle 1: remocao lenta que vai FALHAR
+    final removeCompleter = Completer<void>();
+    when(() => repo.remove('1')).thenAnswer((_) => removeCompleter.future);
+    final t1 = provider.toggle(_track('1')); // remove otimista
+    expect(provider.isFavorite('1'), isFalse);
+
+    // Toggle 2 (antes de t1 terminar): adiciona de volta, com sucesso
+    when(() => repo.add(any())).thenAnswer((_) async {});
+    await provider.toggle(_track('1'));
+    expect(provider.isFavorite('1'), isTrue);
+
+    // Agora a remocao de t1 falha -> rollback nao pode duplicar
+    removeCompleter.completeError(Exception('falha'));
+    await t1;
+
+    expect(provider.favorites.where((t) => t.id == '1').length, 1);
+    expect(provider.isFavorite('1'), isTrue);
   });
 }
