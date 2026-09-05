@@ -37,12 +37,14 @@ Navegue por faixas populares, busque músicas, veja detalhes, marque **Favoritos
 
 ## Screenshots
 
-| Catálogo (RF01) | Detalhes (RF02/RF03) | Favoritos (RF04/RF05) |
+| Login (RF07) | Catálogo (RF01) | Detalhes (RF02/RF03) |
 |:---:|:---:|:---:|
-| <img src="docs/screenshots/catalog.png" alt="Tela de catálogo do DataAudio" width="240"> | <img src="docs/screenshots/detail.png" alt="Tela de detalhes de uma faixa" width="240"> | <img src="docs/screenshots/favorites.png" alt="Tela de favoritos" width="240"> |
+| <img src="docs/screenshots/login.png" alt="Tela de login" width="230"> | <img src="docs/screenshots/catalog.png" alt="Tela de catálogo do DataAudio" width="230"> | <img src="docs/screenshots/detail.png" alt="Tela de detalhes de uma faixa" width="230"> |
+| **Favoritos (RF04/RF05)** | **Ouvidas (RF07)** | |
+| <img src="docs/screenshots/favorites.png" alt="Tela de favoritos" width="230"> | <img src="docs/screenshots/listened.png" alt="Tela de ouvidas" width="230"> | |
 
-<!-- Adicionar conforme implementadas: login, ouvidas -->
-_Demais telas em breve, à medida que os RF forem implementados._
+<!-- Adicionar conforme implementada: ajustes (tema/idioma) -->
+_Tela de Ajustes (tema/idioma) em breve._
 
 ## Stack
 
@@ -143,8 +145,8 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 | RF03 | Tela de detalhes | ✅ | `lib/views/detail/track_detail_view.dart` |
 | RF04 | Favoritos com Provider | ✅ | `lib/providers/favorites_provider.dart` |
 | RF05 | Tela de favoritos | ✅ | `lib/views/favorites/favorites_view.dart` |
-| RF06 | Persistência de dados | 🟨 | `lib/repositories/local_favorites_repository.dart` (favoritos ✅; ouvidas com RF07) |
-| RF07 | Login e itens ouvidos | ⬜ | `lib/providers/auth_provider.dart` |
+| RF06 | Persistência de dados | ✅ | `lib/repositories/local_favorites_repository.dart` + `local_listened_repository.dart` |
+| RF07 | Login e itens ouvidos | ✅ | `lib/providers/auth_provider.dart` |
 | RF08 | Busca | 🟨 | `lib/services/deezer_service.dart` (serviço pronto; falta a tela) |
 | RF09 | Feedback de UI | 🟨 | `lib/widgets/error_view.dart` (aplicado no catálogo) |
 | RF10 | Acessibilidade | 🟨 | `lib/widgets/app_network_image.dart` (Semantics + adaptive + tema) |
@@ -157,7 +159,7 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **43 testes** verdes; `flutter analyze` sem issues.
+- ✅ **75 testes** verdes; `flutter analyze` sem issues.
 
 ## Documentação
 

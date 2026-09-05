@@ -15,5 +15,17 @@
   "detailDuration": "Duration",
   "favoritesEmpty": "You have no favorites yet.",
   "favoriteAdd": "Add to favorites",
-  "favoriteRemove": "Remove from favorites"
+  "favoriteRemove": "Remove from favorites",
+  "loginTitle": "Sign in",
+  "loginUsername": "Username",
+  "loginPassword": "Password",
+  "loginSignIn": "Sign in",
+  "loginRegister": "Create account",
+  "loginErrorEmpty": "Fill in username and password.",
+  "loginErrorInvalid": "Invalid username or password.",
+  "loginErrorExists": "This username already exists.",
+  "logout": "Log out",
+  "listenedEmpty": "You haven't marked anything as listened yet.",
+  "listenedMark": "Mark as listened",
+  "listenedUnmark": "Unmark listened"
 }

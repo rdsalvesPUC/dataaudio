@@ -56,4 +56,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favoriteRemove => 'Remove from favorites';
+
+  @override
+  String get loginTitle => 'Sign in';
+
+  @override
+  String get loginUsername => 'Username';
+
+  @override
+  String get loginPassword => 'Password';
+
+  @override
+  String get loginSignIn => 'Sign in';
+
+  @override
+  String get loginRegister => 'Create account';
+
+  @override
+  String get loginErrorEmpty => 'Fill in username and password.';
+
+  @override
+  String get loginErrorInvalid => 'Invalid username or password.';
+
+  @override
+  String get loginErrorExists => 'This username already exists.';
+
+  @override
+  String get logout => 'Log out';
+
+  @override
+  String get listenedEmpty => 'You haven\'t marked anything as listened yet.';
+
+  @override
+  String get listenedMark => 'Mark as listened';
+
+  @override
+  String get listenedUnmark => 'Unmark listened';
 }

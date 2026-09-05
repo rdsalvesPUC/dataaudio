@@ -5,10 +5,11 @@ import 'package:dataaudio/core/navigation/app_routes.dart';
 import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/models/track_page.dart';
+import 'package:dataaudio/providers/auth_provider.dart';
 import 'package:dataaudio/providers/catalog_provider.dart';
 import 'package:dataaudio/providers/favorites_provider.dart';
+import 'package:dataaudio/providers/listened_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
-import 'package:dataaudio/repositories/favorites_repository.dart';
 import 'package:dataaudio/views/detail/track_detail_view.dart';
 import 'package:dataaudio/widgets/error_view.dart';
 import 'package:dataaudio/widgets/loading_indicator.dart';
@@ -18,23 +19,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
+import '../support/fakes.dart';
+
 class _MockCatalogRepository extends Mock implements CatalogRepository {}
-
-/// Favoritos em memoria — evita mock/stub para os testes de UP do detalhe.
-class _FakeFavoritesRepository implements FavoritesRepository {
-  final List<Track> _items = [];
-  @override
-  Future<void> add(Track track) async {
-    if (!_items.any((t) => t.id == track.id)) _items.add(track);
-  }
-
-  @override
-  Future<List<Track>> getAll() async => List.of(_items);
-
-  @override
-  Future<void> remove(String id) async =>
-      _items.removeWhere((t) => t.id == id);
-}
 
 Track _fullTrack() => const Track(
       id: '1',
@@ -59,7 +46,10 @@ Widget _wrapDetail(
         providers: [
           Provider<CatalogRepository>.value(value: repo),
           ChangeNotifierProvider<FavoritesProvider>.value(
-            value: favorites ?? FavoritesProvider(_FakeFavoritesRepository()),
+            value: favorites ?? FavoritesProvider(FakeFavoritesRepository()),
+          ),
+          ChangeNotifierProvider<ListenedProvider>(
+            create: (_) => ListenedProvider(FakeListenedRepository()),
           ),
         ],
         child: TrackDetailView(track: track),
@@ -153,6 +143,9 @@ void main() {
       when(() => repo.loadChart(index: 0, limit: any(named: 'limit')))
           .thenAnswer((_) async => TrackPage(tracks: [track], hasMore: false));
       when(() => repo.trackDetail('1')).thenAnswer((_) async => track);
+      // Rota /home e protegida (RN01): a sessao precisa estar ativa.
+      final auth = AuthProvider(FakeAuthRepository());
+      await auth.register('joao', '1234');
 
       await tester.pumpWidget(
         MultiProvider(
@@ -160,15 +153,19 @@ void main() {
             Provider<CatalogRepository>.value(value: repo),
             ChangeNotifierProvider(create: (_) => CatalogProvider(repo)),
             ChangeNotifierProvider(
-              create: (_) => FavoritesProvider(_FakeFavoritesRepository()),
+              create: (_) => FavoritesProvider(FakeFavoritesRepository()),
             ),
+            ChangeNotifierProvider(
+              create: (_) => ListenedProvider(FakeListenedRepository()),
+            ),
+            ChangeNotifierProvider<AuthProvider>.value(value: auth),
           ],
           child: MaterialApp(
             locale: const Locale('en'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateRoute: AppRoutes.onGenerateRoute,
-            initialRoute: AppRoutes.initial,
+            initialRoute: AppRoutes.home, // pula o login neste teste de navegacao
           ),
         ),
       );
@@ -191,7 +188,7 @@ void main() {
       // Arrange
       final track = _fullTrack();
       when(() => repo.trackDetail('1')).thenAnswer((_) async => track);
-      final favorites = FavoritesProvider(_FakeFavoritesRepository());
+      final favorites = FavoritesProvider(FakeFavoritesRepository());
 
       await tester.pumpWidget(_wrapDetail(track, repo, favorites: favorites));
       await tester.pumpAndSettle();
@@ -231,7 +228,7 @@ void main() {
         durationSeconds: 0, // parcial: sem duracao
       );
       when(() => repo.trackDetail('1')).thenAnswer((_) async => _fullTrack());
-      final favorites = FavoritesProvider(_FakeFavoritesRepository());
+      final favorites = FavoritesProvider(FakeFavoritesRepository());
 
       await tester.pumpWidget(_wrapDetail(partial, repo, favorites: favorites));
       await tester.pumpAndSettle(); // detalhe resolvido
