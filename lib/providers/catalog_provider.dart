@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-import '../core/error/app_exceptions.dart';
 import '../models/track.dart';
 import '../repositories/catalog_repository.dart';
 
@@ -24,8 +23,10 @@ class CatalogProvider extends ChangeNotifier {
   bool _hasMore = false;
   bool get hasMore => _hasMore;
 
-  AppException? _error;
-  AppException? get error => _error;
+  // Guarda qualquer erro (AppException ou inesperado) para a UI localizar a
+  // mensagem via failure_mapper e nunca travar (RF09).
+  Object? _error;
+  Object? get error => _error;
 
   bool get isEmpty => _tracks.isEmpty;
 
@@ -41,7 +42,7 @@ class CatalogProvider extends ChangeNotifier {
         ..clear()
         ..addAll(page.tracks);
       _hasMore = page.hasMore;
-    } on AppException catch (e) {
+    } catch (e) {
       _error = e;
     } finally {
       _isLoading = false;
@@ -60,7 +61,7 @@ class CatalogProvider extends ChangeNotifier {
           await _repository.loadChart(index: _tracks.length, limit: pageSize);
       _tracks.addAll(page.tracks);
       _hasMore = page.hasMore;
-    } on AppException catch (e) {
+    } catch (e) {
       _error = e;
     } finally {
       _isLoadingMore = false;
