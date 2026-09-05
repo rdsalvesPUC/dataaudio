@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/track.dart';
+import '../../providers/auth_provider.dart';
 import '../../views/detail/track_detail_view.dart';
 import '../../views/home/home_shell.dart';
 import '../../views/login/login_view.dart';
@@ -23,20 +25,14 @@ abstract final class AppRoutes {
           settings: settings,
         );
       case home:
-        return MaterialPageRoute(
-          builder: (_) => const HomeShell(),
-          settings: settings,
-        );
+        return _guarded(settings, (_) => const HomeShell());
       case detail:
         // RF02: a faixa selecionada vem como argumento da rota.
         final args = settings.arguments;
         if (args is Track) {
-          return MaterialPageRoute(
-            builder: (_) => TrackDetailView(track: args),
-            settings: settings,
-          );
+          return _guarded(settings, (_) => TrackDetailView(track: args));
         }
-        return _fallbackHome();
+        return _guarded(settings, (_) => const HomeShell());
       default:
         // Rota desconhecida: cai no login (raiz), que decide o acesso.
         return MaterialPageRoute(
@@ -46,8 +42,18 @@ abstract final class AppRoutes {
     }
   }
 
-  static Route<dynamic> _fallbackHome() => MaterialPageRoute(
-        builder: (_) => const HomeShell(),
-        settings: const RouteSettings(name: home),
-      );
+  /// Rota protegida (RN01): so monta [authed] com sessao ativa; sem sessao,
+  /// redireciona para o login. Blinda o guarda na propria rota, nao so no
+  /// fluxo de cold-start.
+  static Route<dynamic> _guarded(
+    RouteSettings settings,
+    WidgetBuilder authed,
+  ) {
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) => context.watch<AuthProvider>().isAuthenticated
+          ? authed(context)
+          : const LoginView(),
+    );
+  }
 }

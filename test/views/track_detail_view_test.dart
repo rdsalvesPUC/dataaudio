@@ -143,6 +143,9 @@ void main() {
       when(() => repo.loadChart(index: 0, limit: any(named: 'limit')))
           .thenAnswer((_) async => TrackPage(tracks: [track], hasMore: false));
       when(() => repo.trackDetail('1')).thenAnswer((_) async => track);
+      // Rota /home e protegida (RN01): a sessao precisa estar ativa.
+      final auth = AuthProvider(FakeAuthRepository());
+      await auth.register('joao', '1234');
 
       await tester.pumpWidget(
         MultiProvider(
@@ -155,9 +158,7 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => ListenedProvider(FakeListenedRepository()),
             ),
-            ChangeNotifierProvider(
-              create: (_) => AuthProvider(FakeAuthRepository()),
-            ),
+            ChangeNotifierProvider<AuthProvider>.value(value: auth),
           ],
           child: MaterialApp(
             locale: const Locale('en'),
