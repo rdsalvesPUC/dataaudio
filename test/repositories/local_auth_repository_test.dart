@@ -26,6 +26,14 @@ void main() {
     expect((await repo.currentSession())?.username, 'joao');
   });
 
+  test('nao grava a senha em texto puro (armazena hash) - seguranca', () async {
+    await repo.register('joao', 'segredo123');
+
+    final raw = storage.getStringList('auth_users').join();
+    expect(raw.contains('segredo123'), isFalse,
+        reason: 'a senha nunca deve aparecer crua no storage');
+  });
+
   test('register de usuario existente lanca AuthException', () async {
     await repo.register('joao', '1234');
     expect(
