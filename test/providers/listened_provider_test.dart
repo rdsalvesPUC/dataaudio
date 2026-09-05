@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/providers/listened_provider.dart';
 import 'package:dataaudio/repositories/listened_repository.dart';
@@ -67,6 +69,29 @@ void main() {
       await provider.toggle(_track('1')); // nao deve lancar
 
       expect(provider.isListened('1'), isFalse); // otimista revertido
+    });
+
+    test('toggles concorrentes na mesma faixa nao duplicam apos rollback '
+        '(Codex P2)', () async {
+      final repo = _MockListenedRepository();
+      when(() => repo.getAll()).thenAnswer((_) async => [_track('1')]);
+      final provider = ListenedProvider(repo);
+      await provider.load();
+
+      final removeCompleter = Completer<void>();
+      when(() => repo.remove('1')).thenAnswer((_) => removeCompleter.future);
+      final t1 = provider.toggle(_track('1')); // remove otimista (vai falhar)
+      expect(provider.isListened('1'), isFalse);
+
+      when(() => repo.add(any())).thenAnswer((_) async {});
+      await provider.toggle(_track('1')); // add de volta, com sucesso
+      expect(provider.isListened('1'), isTrue);
+
+      removeCompleter.completeError(Exception('falha'));
+      await t1;
+
+      expect(provider.listened.where((t) => t.id == '1').length, 1);
+      expect(provider.isListened('1'), isTrue);
     });
   });
 }
