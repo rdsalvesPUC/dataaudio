@@ -3,12 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../providers/catalog_provider.dart';
 import '../../providers/favorites_provider.dart';
+import '../../providers/listened_provider.dart';
+import '../../repositories/auth_repository.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../repositories/deezer_catalog_repository.dart';
 import '../../repositories/favorites_repository.dart';
+import '../../repositories/listened_repository.dart';
+import '../../repositories/local_auth_repository.dart';
 import '../../repositories/local_favorites_repository.dart';
+import '../../repositories/local_listened_repository.dart';
 import '../../services/deezer_service.dart';
 import '../../services/local_storage_service.dart';
 
@@ -40,6 +46,9 @@ class _CompositionRootState extends State<CompositionRoot> {
   late final LocalStorageService _storage = LocalStorageService(widget.prefs);
   late final FavoritesRepository _favoritesRepository =
       LocalFavoritesRepository(_storage);
+  late final ListenedRepository _listenedRepository =
+      LocalListenedRepository(_storage);
+  late final AuthRepository _authRepository = LocalAuthRepository(_storage);
 
   @override
   void dispose() {
@@ -60,8 +69,14 @@ class _CompositionRootState extends State<CompositionRoot> {
         ChangeNotifierProvider(
           create: (_) => FavoritesProvider(_favoritesRepository)..load(),
         ),
-        // Ouvidas, Auth e Settings entram aqui nos proximos RF,
-        // escolhendo Local* ou Cloud*/Firebase* conforme `useCloud`.
+        ChangeNotifierProvider(
+          create: (_) => ListenedProvider(_listenedRepository)..load(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(_authRepository),
+        ),
+        // Settings (PF01/PF02) entra aqui em seguida; o bonus troca Local*
+        // por Firebase*/Cloud* conforme `useCloud`.
       ],
       child: widget.child,
     );

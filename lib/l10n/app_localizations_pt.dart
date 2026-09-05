@@ -56,4 +56,40 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get favoriteRemove => 'Remover dos favoritos';
+
+  @override
+  String get loginTitle => 'Entrar';
+
+  @override
+  String get loginUsername => 'Usuário';
+
+  @override
+  String get loginPassword => 'Senha';
+
+  @override
+  String get loginSignIn => 'Entrar';
+
+  @override
+  String get loginRegister => 'Criar conta';
+
+  @override
+  String get loginErrorEmpty => 'Preencha usuário e senha.';
+
+  @override
+  String get loginErrorInvalid => 'Usuário ou senha inválidos.';
+
+  @override
+  String get loginErrorExists => 'Este usuário já existe.';
+
+  @override
+  String get logout => 'Sair';
+
+  @override
+  String get listenedEmpty => 'Você ainda não marcou nada como ouvida.';
+
+  @override
+  String get listenedMark => 'Marcar como ouvida';
+
+  @override
+  String get listenedUnmark => 'Desmarcar ouvida';
 }

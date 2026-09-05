@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import '../../core/navigation/app_routes.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/auth_provider.dart';
 import '../catalog/catalog_view.dart';
 import '../favorites/favorites_view.dart';
+import '../listened/listened_view.dart';
 
 /// Casca principal com navegacao por abas: catalogo / favoritos / ouvidas /
 /// ajustes (SDD §7). Por ora so o catalogo (RF01) esta implementado; as demais
@@ -24,7 +29,7 @@ class _HomeShellState extends State<HomeShell> {
     final pages = <Widget>[
       const CatalogView(),
       const FavoritesView(),
-      _Placeholder(label: l10n.navListened),
+      const ListenedView(),
       _Placeholder(label: l10n.navSettings),
     ];
 
@@ -36,7 +41,21 @@ class _HomeShellState extends State<HomeShell> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: Text(titles[_index])),
+      appBar: AppBar(
+        title: Text(titles[_index]),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: l10n.logout,
+            onPressed: () async {
+              await context.read<AuthProvider>().logout();
+              if (context.mounted) {
+                Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+              }
+            },
+          ),
+        ],
+      ),
       // IndexedStack mantem todas as abas vivas: trocar de aba nao descarta a
       // CatalogView (preserva paginas carregadas e posicao de scroll).
       body: IndexedStack(index: _index, children: pages),

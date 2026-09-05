@@ -5,6 +5,7 @@ import '../../core/error/failure_mapper.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/track.dart';
 import '../../providers/favorites_provider.dart';
+import '../../providers/listened_provider.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../widgets/app_network_image.dart';
 import '../../widgets/error_view.dart';
@@ -51,10 +52,19 @@ class _TrackDetailViewState extends State<TrackDetailView> {
     final l10n = AppLocalizations.of(context)!;
     final isFavorite =
         context.watch<FavoritesProvider>().isFavorite(_current.id);
+    final isListened =
+        context.watch<ListenedProvider>().isListened(_current.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.track.title),
         actions: [
+          IconButton(
+            icon: Icon(
+                isListened ? Icons.check_circle : Icons.check_circle_outline),
+            tooltip: isListened ? l10n.listenedUnmark : l10n.listenedMark,
+            onPressed: () =>
+                context.read<ListenedProvider>().toggle(_current),
+          ),
           IconButton(
             icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
             tooltip: isFavorite ? l10n.favoriteRemove : l10n.favoriteAdd,
