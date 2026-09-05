@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dataaudio/core/error/app_exceptions.dart';
 import 'package:dataaudio/core/navigation/app_routes.dart';
 import 'package:dataaudio/l10n/app_localizations.dart';
@@ -131,5 +133,41 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(TrackDetailView), findsOneWidget);
+  });
+
+  testWidgets(
+      'RF08: resposta obsoleta e descartada (busca A lenta nao sobrescreve B) '
+      '(Codex P2)', (tester) async {
+    // Arrange: A ("slow") e controlada por um Completer; B ("fast") resolve na
+    // hora. A busca A e disparada antes de B, mas so completa por ultimo.
+    final slow = Completer<TrackPage>();
+    when(() => repo.search('slow',
+            index: any(named: 'index'), limit: any(named: 'limit')))
+        .thenAnswer((_) => slow.future);
+    when(() => repo.search('fast',
+            index: any(named: 'index'), limit: any(named: 'limit')))
+        .thenAnswer(
+            (_) async => TrackPage(tracks: [_track('fast')], hasMore: false));
+
+    await tester.pumpWidget(_wrap(repo));
+
+    // Dispara A (fica pendente)
+    await tester.enterText(find.byType(TextField), 'slow');
+    await tester.tap(find.widgetWithText(FilledButton, 'Search'));
+    await tester.pump();
+
+    // Dispara B (resolve)
+    await tester.enterText(find.byType(TextField), 'fast');
+    await tester.tap(find.widgetWithText(FilledButton, 'Search'));
+    await tester.pumpAndSettle();
+    expect(find.text('Faixa fast'), findsOneWidget);
+
+    // Agora a resposta obsoleta de A chega por ultimo
+    slow.complete(TrackPage(tracks: [_track('slow')], hasMore: false));
+    await tester.pumpAndSettle();
+
+    // Assert: B continua na tela; A (obsoleta) foi ignorada
+    expect(find.text('Faixa fast'), findsOneWidget);
+    expect(find.text('Faixa slow'), findsNothing);
   });
 }
