@@ -40,8 +40,8 @@ Navegue por faixas populares, busque músicas, veja detalhes, marque **Favoritos
 | Login (RF07) | Catálogo (RF01) | Detalhes (RF02/RF03) |
 |:---:|:---:|:---:|
 | <img src="docs/screenshots/login.png" alt="Tela de login" width="230"> | <img src="docs/screenshots/catalog.png" alt="Tela de catálogo do DataAudio" width="230"> | <img src="docs/screenshots/detail.png" alt="Tela de detalhes de uma faixa" width="230"> |
-| **Favoritos (RF04/RF05)** | **Ouvidas (RF07)** | |
-| <img src="docs/screenshots/favorites.png" alt="Tela de favoritos" width="230"> | <img src="docs/screenshots/listened.png" alt="Tela de ouvidas" width="230"> | |
+| **Favoritos (RF04/RF05)** | **Ouvidas (RF07)** | **Busca (RF08)** |
+| <img src="docs/screenshots/favorites.png" alt="Tela de favoritos" width="230"> | <img src="docs/screenshots/listened.png" alt="Tela de ouvidas" width="230"> | <img src="docs/screenshots/search.png" alt="Tela de busca" width="230"> |
 
 <!-- Adicionar conforme implementada: ajustes (tema/idioma) -->
 _Tela de Ajustes (tema/idioma) em breve._
@@ -147,7 +147,7 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 | RF05 | Tela de favoritos | ✅ | `lib/views/favorites/favorites_view.dart` |
 | RF06 | Persistência de dados | ✅ | `lib/repositories/local_favorites_repository.dart` + `local_listened_repository.dart` |
 | RF07 | Login e itens ouvidos | ✅ | `lib/providers/auth_provider.dart` |
-| RF08 | Busca | 🟨 | `lib/services/deezer_service.dart` (serviço pronto; falta a tela) |
+| RF08 | Busca | ✅ | `lib/views/search/search_view.dart` |
 | RF09 | Feedback de UI | 🟨 | `lib/widgets/error_view.dart` (aplicado no catálogo) |
 | RF10 | Acessibilidade | 🟨 | `lib/widgets/app_network_image.dart` (Semantics + adaptive + tema) |
 
@@ -159,7 +159,7 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **76 testes** verdes; `flutter analyze` sem issues.
+- ✅ **82 testes** verdes; `flutter analyze` sem issues.
 
 ## Documentação
 
