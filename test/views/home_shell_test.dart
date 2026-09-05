@@ -1,27 +1,20 @@
 import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/models/track_page.dart';
+import 'package:dataaudio/providers/auth_provider.dart';
 import 'package:dataaudio/providers/catalog_provider.dart';
 import 'package:dataaudio/providers/favorites_provider.dart';
+import 'package:dataaudio/providers/listened_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
-import 'package:dataaudio/repositories/favorites_repository.dart';
 import 'package:dataaudio/views/home/home_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class _MockCatalogRepository extends Mock implements CatalogRepository {}
+import '../support/fakes.dart';
 
-class _FakeFavoritesRepository implements FavoritesRepository {
-  final List<Track> _items = [];
-  @override
-  Future<void> add(Track track) async => _items.add(track);
-  @override
-  Future<List<Track>> getAll() async => List.of(_items);
-  @override
-  Future<void> remove(String id) async => _items.removeWhere((t) => t.id == id);
-}
+class _MockCatalogRepository extends Mock implements CatalogRepository {}
 
 Track _track(String id) => Track(
       id: id,
@@ -48,7 +41,13 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => CatalogProvider(repo)),
           ChangeNotifierProvider(
-            create: (_) => FavoritesProvider(_FakeFavoritesRepository()),
+            create: (_) => FavoritesProvider(FakeFavoritesRepository()),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => ListenedProvider(FakeListenedRepository()),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AuthProvider(FakeAuthRepository()),
           ),
         ],
         child: MaterialApp(

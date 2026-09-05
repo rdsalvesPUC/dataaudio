@@ -193,6 +193,78 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Remover dos favoritos'**
   String get favoriteRemove;
+
+  /// Titulo da tela de login (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar'**
+  String get loginTitle;
+
+  /// Rotulo do campo usuario (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Usuário'**
+  String get loginUsername;
+
+  /// Rotulo do campo senha (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Senha'**
+  String get loginPassword;
+
+  /// Botao de autenticar (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar'**
+  String get loginSignIn;
+
+  /// Botao de cadastrar (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Criar conta'**
+  String get loginRegister;
+
+  /// Validacao de campos vazios no login (RF07/RF09).
+  ///
+  /// In pt, this message translates to:
+  /// **'Preencha usuário e senha.'**
+  String get loginErrorEmpty;
+
+  /// Credenciais invalidas (RF07/RF09).
+  ///
+  /// In pt, this message translates to:
+  /// **'Usuário ou senha inválidos.'**
+  String get loginErrorInvalid;
+
+  /// Cadastro de usuario ja existente (RF07/RF09).
+  ///
+  /// In pt, this message translates to:
+  /// **'Este usuário já existe.'**
+  String get loginErrorExists;
+
+  /// Acao de encerrar a sessao (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Sair'**
+  String get logout;
+
+  /// Estado vazio da tela de Ouvidas (RF07).
+  ///
+  /// In pt, this message translates to:
+  /// **'Você ainda não marcou nada como ouvida.'**
+  String get listenedEmpty;
+
+  /// Rotulo de acessibilidade ao marcar como ouvida (RF07/RF10).
+  ///
+  /// In pt, this message translates to:
+  /// **'Marcar como ouvida'**
+  String get listenedMark;
+
+  /// Rotulo de acessibilidade ao desmarcar ouvida (RF07/RF10).
+  ///
+  /// In pt, this message translates to:
+  /// **'Desmarcar ouvida'**
+  String get listenedUnmark;
 }
 
 class _AppLocalizationsDelegate
