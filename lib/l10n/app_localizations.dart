@@ -265,6 +265,18 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Desmarcar ouvida'**
   String get listenedUnmark;
+
+  /// Botao/titulo da busca (RF08).
+  ///
+  /// In pt, this message translates to:
+  /// **'Buscar'**
+  String get searchButton;
+
+  /// Estado inicial da tela de busca, antes de pesquisar (RF08).
+  ///
+  /// In pt, this message translates to:
+  /// **'Busque por faixas e artistas.'**
+  String get searchPrompt;
 }
 
 class _AppLocalizationsDelegate

@@ -45,6 +45,12 @@ class _HomeShellState extends State<HomeShell> {
         title: Text(titles[_index]),
         actions: [
           IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: l10n.searchButton,
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AppRoutes.search),
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             tooltip: l10n.logout,
             onPressed: () async {
