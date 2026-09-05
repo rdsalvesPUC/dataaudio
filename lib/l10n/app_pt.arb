@@ -63,5 +63,53 @@
   "favoriteRemove": "Remover dos favoritos",
   "@favoriteRemove": {
     "description": "Rotulo de acessibilidade do botao ao desfavoritar (RF04/RF10)."
+  },
+  "loginTitle": "Entrar",
+  "@loginTitle": {
+    "description": "Titulo da tela de login (RF07)."
+  },
+  "loginUsername": "Usuário",
+  "@loginUsername": {
+    "description": "Rotulo do campo usuario (RF07)."
+  },
+  "loginPassword": "Senha",
+  "@loginPassword": {
+    "description": "Rotulo do campo senha (RF07)."
+  },
+  "loginSignIn": "Entrar",
+  "@loginSignIn": {
+    "description": "Botao de autenticar (RF07)."
+  },
+  "loginRegister": "Criar conta",
+  "@loginRegister": {
+    "description": "Botao de cadastrar (RF07)."
+  },
+  "loginErrorEmpty": "Preencha usuário e senha.",
+  "@loginErrorEmpty": {
+    "description": "Validacao de campos vazios no login (RF07/RF09)."
+  },
+  "loginErrorInvalid": "Usuário ou senha inválidos.",
+  "@loginErrorInvalid": {
+    "description": "Credenciais invalidas (RF07/RF09)."
+  },
+  "loginErrorExists": "Este usuário já existe.",
+  "@loginErrorExists": {
+    "description": "Cadastro de usuario ja existente (RF07/RF09)."
+  },
+  "logout": "Sair",
+  "@logout": {
+    "description": "Acao de encerrar a sessao (RF07)."
+  },
+  "listenedEmpty": "Você ainda não marcou nada como ouvida.",
+  "@listenedEmpty": {
+    "description": "Estado vazio da tela de Ouvidas (RF07)."
+  },
+  "listenedMark": "Marcar como ouvida",
+  "@listenedMark": {
+    "description": "Rotulo de acessibilidade ao marcar como ouvida (RF07/RF10)."
+  },
+  "listenedUnmark": "Desmarcar ouvida",
+  "@listenedUnmark": {
+    "description": "Rotulo de acessibilidade ao desmarcar ouvida (RF07/RF10)."
   }
 }
