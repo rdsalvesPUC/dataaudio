@@ -216,5 +216,34 @@ void main() {
       expect(favorites.isFavorite('1'), isFalse);
       expect(find.byIcon(Icons.favorite_border), findsOneWidget);
     });
+
+    testWidgets(
+        'favorita a faixa resolvida (completa), nao a parcial da rota (Codex #4)',
+        (tester) async {
+      // Arrange: a rota traz uma faixa parcial; o detalhe resolve a completa
+      const partial = Track(
+        id: '1',
+        title: 'Harder Better',
+        artistName: 'Daft Punk',
+        albumTitle: '', // parcial: sem album
+        coverSmall: '',
+        coverBig: '',
+        durationSeconds: 0, // parcial: sem duracao
+      );
+      when(() => repo.trackDetail('1')).thenAnswer((_) async => _fullTrack());
+      final favorites = FavoritesProvider(_FakeFavoritesRepository());
+
+      await tester.pumpWidget(_wrapDetail(partial, repo, favorites: favorites));
+      await tester.pumpAndSettle(); // detalhe resolvido
+
+      // Act: favorita depois de carregar
+      await tester.tap(find.byIcon(Icons.favorite_border));
+      await tester.pumpAndSettle();
+
+      // Assert: persistiu os dados completos, nao os da rota
+      final saved = favorites.favorites.single;
+      expect(saved.albumTitle, 'Discovery');
+      expect(saved.durationSeconds, 224);
+    });
   });
 }
