@@ -92,4 +92,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get listenedUnmark => 'Desmarcar ouvida';
+
+  @override
+  String get searchButton => 'Buscar';
+
+  @override
+  String get searchPrompt => 'Busque por faixas e artistas.';
 }
