@@ -8,13 +8,51 @@ import 'package:dataaudio/providers/listened_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
 import 'package:dataaudio/views/catalog/catalog_view.dart';
 import 'package:dataaudio/views/detail/track_detail_view.dart';
+import 'package:dataaudio/views/favorites/favorites_view.dart';
 import 'package:dataaudio/widgets/track_grid_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'support/fakes.dart';
+
+/// Verdadeiro teste de "texto nao cortado": nenhum paragrafo de **conteudo**
+/// (dentro de [within]) pode ter excedido seu maximo de linhas (o que geraria
+/// reticencias). Reticencias nao lancam excecao, entao `takeException` sozinho
+/// nao detectaria o corte. Escopo em [within] para excluir chrome como o titulo
+/// da AppBar (1 linha por design, e redundante com o corpo).
+void _expectNoTruncatedText(WidgetTester tester, Finder within) {
+  final paragraphs = tester.renderObjectList<RenderParagraph>(
+    find.descendant(of: within, matching: find.byType(Text)),
+  );
+  for (final p in paragraphs) {
+    expect(p.didExceedMaxLines, isFalse,
+        reason: 'texto de conteudo cortado com a fonte ampliada');
+  }
+}
+
+Widget _favoritesApp(
+  FavoritesProvider provider, {
+  double textScale = 1.0,
+}) {
+  return MaterialApp(
+    theme: AppTheme.light,
+    locale: const Locale('en'),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(textScaler: TextScaler.linear(textScale)),
+      child: child!,
+    ),
+    home: ChangeNotifierProvider<FavoritesProvider>.value(
+      value: provider,
+      child: const Scaffold(body: FavoritesView()),
+    ),
+  );
+}
 
 class _MockCatalogRepository extends Mock implements CatalogRepository {}
 
@@ -197,11 +235,34 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('RF10: fonte grande (2x) nao estoura o detalhe (linhas de info)',
+  testWidgets('RF10: fonte grande (2x) nao estoura nem corta o detalhe',
       (tester) async {
     await tester.pumpWidget(_detailApp(_detailTrack(), textScale: 2.0));
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
+    // Conteudo do corpo (exclui o titulo da AppBar, que e chrome de 1 linha).
+    _expectNoTruncatedText(tester, find.byType(SingleChildScrollView));
+  });
+
+  testWidgets('RF10: fonte grande (2x) nao corta o texto nas listas', (tester) async {
+    const longTitle =
+        'Titulo bem longo de uma faixa que precisa quebrar em varias linhas';
+    final track = Track(
+      id: '1',
+      title: longTitle,
+      artistName: 'Um nome de artista tambem bem comprido para o teste',
+      albumTitle: '',
+      coverSmall: '',
+      coverBig: '',
+      durationSeconds: 0,
+    );
+    final provider = FavoritesProvider(FakeFavoritesRepository([track]));
+    await provider.load();
+
+    await tester.pumpWidget(_favoritesApp(provider, textScale: 2.0));
+    await tester.pumpAndSettle();
+
+    _expectNoTruncatedText(tester, find.byType(FavoritesView));
   });
 }
