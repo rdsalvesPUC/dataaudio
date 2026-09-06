@@ -51,7 +51,7 @@ class FavoritesView extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               child: AppNetworkImage(
                 url: track.coverSmall,
-                semanticLabel: track.title,
+                excludeSemantics: true, // o ListTile ja anuncia titulo/artista
               ),
             ),
           ),

@@ -128,7 +128,7 @@ class _SearchViewState extends State<SearchView> {
               borderRadius: BorderRadius.circular(6),
               child: AppNetworkImage(
                 url: track.coverSmall,
-                semanticLabel: track.title,
+                excludeSemantics: true, // o ListTile ja anuncia titulo/artista
               ),
             ),
           ),
