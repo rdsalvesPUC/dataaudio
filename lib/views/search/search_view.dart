@@ -132,10 +132,9 @@ class _SearchViewState extends State<SearchView> {
               ),
             ),
           ),
-          title:
-              Text(track.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(track.artistName,
-              maxLines: 1, overflow: TextOverflow.ellipsis),
+          // Sem maxLines: quebra em linhas com a fonte ampliada (RF10).
+          title: Text(track.title),
+          subtitle: Text(track.artistName),
           onTap: () => Navigator.of(context)
               .pushNamed(AppRoutes.detail, arguments: track),
         );
