@@ -116,7 +116,9 @@ class _DetailBody extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: AppNetworkImage(url: cover, semanticLabel: track.title),
+                  // Capa decorativa: titulo/artista sao anunciados pelos textos
+                // abaixo (evita repeticao no leitor de tela, RF10).
+                child: AppNetworkImage(url: cover, excludeSemantics: true),
                 ),
               ),
               const SizedBox(height: 20),
