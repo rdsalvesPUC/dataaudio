@@ -72,6 +72,10 @@
   "@loginUsername": {
     "description": "Rotulo do campo usuario (RF07)."
   },
+  "loginEmail": "E-mail",
+  "@loginEmail": {
+    "description": "Rotulo do campo no modo nuvem (Firebase Auth usa e-mail)."
+  },
   "loginPassword": "Senha",
   "@loginPassword": {
     "description": "Rotulo do campo senha (RF07)."

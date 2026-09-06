@@ -17,6 +17,7 @@ import '../../repositories/local_favorites_repository.dart';
 import '../../repositories/local_listened_repository.dart';
 import '../../services/deezer_service.dart';
 import '../../services/local_storage_service.dart';
+import 'app_config.dart';
 
 /// Ponto unico de composicao (ADR-0006/SDD §10): decide as implementacoes
 /// (local x nuvem) e monta o [MultiProvider] que embrulha o app. Trocar
@@ -60,6 +61,7 @@ class _CompositionRootState extends State<CompositionRoot> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<AppConfig>.value(value: AppConfig(useCloud: widget.useCloud)),
         // Repositorio exposto para leituras pontuais via FutureBuilder
         // (ex.: a tela de detalhe, RF03/ADR-0003).
         Provider<CatalogRepository>.value(value: _catalogRepository),

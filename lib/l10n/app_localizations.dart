@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Usuário'**
   String get loginUsername;
 
+  /// Rotulo do campo no modo nuvem (Firebase Auth usa e-mail).
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail'**
+  String get loginEmail;
+
   /// Rotulo do campo senha (RF07).
   ///
   /// In pt, this message translates to:

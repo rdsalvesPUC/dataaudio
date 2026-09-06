@@ -18,6 +18,7 @@
   "favoriteRemove": "Remove from favorites",
   "loginTitle": "Sign in",
   "loginUsername": "Username",
+  "loginEmail": "Email",
   "loginPassword": "Password",
   "loginSignIn": "Sign in",
   "loginRegister": "Create account",

@@ -64,6 +64,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginUsername => 'Username';
 
   @override
+  String get loginEmail => 'Email';
+
+  @override
   String get loginPassword => 'Password';
 
   @override
