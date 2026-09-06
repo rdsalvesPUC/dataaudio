@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/di/app_config.dart';
 import '../../core/error/app_exceptions.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../l10n/app_localizations.dart';
@@ -80,6 +81,8 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
+    // No modo nuvem (Firebase Auth), o login e por e-mail.
+    final useCloud = context.read<AppConfig>().useCloud;
 
     if (auth.isRestoring) {
       return const Scaffold(body: LoadingIndicator());
@@ -109,9 +112,15 @@ class _LoginViewState extends State<LoginView> {
                   TextField(
                     controller: _userController,
                     textInputAction: TextInputAction.next,
+                    keyboardType: useCloud
+                        ? TextInputType.emailAddress
+                        : TextInputType.text,
                     decoration: InputDecoration(
-                      labelText: l10n.loginUsername,
-                      prefixIcon: const Icon(Icons.person_outline),
+                      labelText:
+                          useCloud ? l10n.loginEmail : l10n.loginUsername,
+                      prefixIcon: Icon(useCloud
+                          ? Icons.alternate_email
+                          : Icons.person_outline),
                       border: const OutlineInputBorder(),
                     ),
                   ),

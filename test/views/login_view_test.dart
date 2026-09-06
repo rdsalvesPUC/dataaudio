@@ -1,3 +1,4 @@
+import 'package:dataaudio/core/di/app_config.dart';
 import 'package:dataaudio/core/navigation/app_routes.dart';
 import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/providers/auth_provider.dart';
@@ -10,8 +11,11 @@ import '../support/fakes.dart';
 
 /// App minimo: login na raiz; a rota home leva a um marcador simples (evita
 /// montar a HomeShell e todos os seus providers).
-Widget _app(AuthProvider auth) => ChangeNotifierProvider<AuthProvider>.value(
-      value: auth,
+Widget _app(AuthProvider auth, {bool useCloud = false}) => MultiProvider(
+      providers: [
+        Provider<AppConfig>.value(value: AppConfig(useCloud: useCloud)),
+        ChangeNotifierProvider<AuthProvider>.value(value: auth),
+      ],
       child: MaterialApp(
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -97,5 +101,22 @@ void main() {
 
     // Assert: pulou o login
     expect(find.text('HOME_MARKER'), findsOneWidget);
+  });
+
+  testWidgets('modo local: campo rotulado como Username', (tester) async {
+    await tester.pumpWidget(_app(AuthProvider(FakeAuthRepository())));
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(TextField, 'Username'), findsOneWidget);
+    expect(find.widgetWithText(TextField, 'Email'), findsNothing);
+  });
+
+  testWidgets('modo nuvem (useCloud): campo rotulado como Email', (tester) async {
+    await tester.pumpWidget(
+        _app(AuthProvider(FakeAuthRepository()), useCloud: true));
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(TextField, 'Email'), findsOneWidget);
+    expect(find.widgetWithText(TextField, 'Username'), findsNothing);
   });
 }
