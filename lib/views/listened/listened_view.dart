@@ -51,14 +51,13 @@ class ListenedView extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               child: AppNetworkImage(
                 url: track.coverSmall,
-                semanticLabel: track.title,
+                excludeSemantics: true, // o ListTile ja anuncia titulo/artista
               ),
             ),
           ),
-          title:
-              Text(track.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(track.artistName,
-              maxLines: 1, overflow: TextOverflow.ellipsis),
+          // Sem maxLines: quebra em linhas com a fonte ampliada (RF10).
+          title: Text(track.title),
+          subtitle: Text(track.artistName),
           trailing: IconButton(
             icon: const Icon(Icons.check_circle),
             tooltip: l10n.listenedUnmark,

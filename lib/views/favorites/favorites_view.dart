@@ -51,14 +51,14 @@ class FavoritesView extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               child: AppNetworkImage(
                 url: track.coverSmall,
-                semanticLabel: track.title,
+                excludeSemantics: true, // o ListTile ja anuncia titulo/artista
               ),
             ),
           ),
-          title: Text(track.title,
-              maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(track.artistName,
-              maxLines: 1, overflow: TextOverflow.ellipsis),
+          // Sem maxLines: o texto quebra em linhas com a fonte ampliada, em
+          // vez de ser cortado com reticencias (RF10).
+          title: Text(track.title),
+          subtitle: Text(track.artistName),
           trailing: IconButton(
             icon: const Icon(Icons.favorite),
             tooltip: l10n.favoriteRemove,
