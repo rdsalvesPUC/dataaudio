@@ -64,6 +64,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loginUsername => 'Usuário';
 
   @override
+  String get loginEmail => 'E-mail';
+
+  @override
   String get loginPassword => 'Senha';
 
   @override
@@ -80,6 +83,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get loginErrorExists => 'Este usuário já existe.';
+
+  @override
+  String get loginErrorWeakPassword =>
+      'Senha muito fraca (mínimo 6 caracteres).';
+
+  @override
+  String get loginErrorInvalidEmail => 'E-mail inválido.';
+
+  @override
+  String get loginErrorTooManyRequests =>
+      'Muitas tentativas. Tente mais tarde.';
 
   @override
   String get logout => 'Sair';

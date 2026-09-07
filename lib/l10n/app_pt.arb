@@ -72,6 +72,10 @@
   "@loginUsername": {
     "description": "Rotulo do campo usuario (RF07)."
   },
+  "loginEmail": "E-mail",
+  "@loginEmail": {
+    "description": "Rotulo do campo no modo nuvem (Firebase Auth usa e-mail)."
+  },
   "loginPassword": "Senha",
   "@loginPassword": {
     "description": "Rotulo do campo senha (RF07)."
@@ -95,6 +99,18 @@
   "loginErrorExists": "Este usuário já existe.",
   "@loginErrorExists": {
     "description": "Cadastro de usuario ja existente (RF07/RF09)."
+  },
+  "loginErrorWeakPassword": "Senha muito fraca (mínimo 6 caracteres).",
+  "@loginErrorWeakPassword": {
+    "description": "Senha fraca no cadastro (Firebase Auth)."
+  },
+  "loginErrorInvalidEmail": "E-mail inválido.",
+  "@loginErrorInvalidEmail": {
+    "description": "E-mail malformado (Firebase Auth)."
+  },
+  "loginErrorTooManyRequests": "Muitas tentativas. Tente mais tarde.",
+  "@loginErrorTooManyRequests": {
+    "description": "Rate limit do Firebase Auth."
   },
   "logout": "Sair",
   "@logout": {

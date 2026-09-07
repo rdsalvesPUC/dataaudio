@@ -93,5 +93,27 @@ void main() {
       expect(provider.listened.where((t) => t.id == '1').length, 1);
       expect(provider.isListened('1'), isTrue);
     });
+
+    test('load invalida toggles pendentes: rollback nao corrompe o novo '
+        'usuario (Codex P1)', () async {
+      final repo = _MockListenedRepository();
+      when(() => repo.getAll()).thenAnswer((_) async => [_track('X')]);
+      final provider = ListenedProvider(repo);
+      await provider.load();
+
+      final removeCompleter = Completer<void>();
+      when(() => repo.remove('X')).thenAnswer((_) => removeCompleter.future);
+      final t1 = provider.toggle(_track('X'));
+      expect(provider.isListened('X'), isFalse);
+
+      when(() => repo.getAll()).thenAnswer((_) async => [_track('Y')]);
+      await provider.load();
+      expect(provider.listened.map((t) => t.id), ['Y']);
+
+      removeCompleter.completeError(Exception('falha'));
+      await t1;
+
+      expect(provider.listened.map((t) => t.id), ['Y']);
+    });
   });
 }

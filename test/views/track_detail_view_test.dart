@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dataaudio/core/di/app_config.dart';
 import 'package:dataaudio/core/error/app_exceptions.dart';
 import 'package:dataaudio/core/navigation/app_routes.dart';
 import 'package:dataaudio/l10n/app_localizations.dart';
@@ -150,6 +151,7 @@ void main() {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
+            Provider<AppConfig>.value(value: const AppConfig(useCloud: false)),
             Provider<CatalogRepository>.value(value: repo),
             ChangeNotifierProvider(create: (_) => CatalogProvider(repo)),
             ChangeNotifierProvider(
