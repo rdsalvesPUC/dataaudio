@@ -155,7 +155,26 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 | RF09 | Feedback de UI | ✅ | `lib/widgets/loading_indicator.dart` + `error_view.dart` (loading/erro em catálogo, detalhe, busca e login; providers não travam) |
 | RF10 | Acessibilidade | ✅ | `test/accessibility_test.dart` (guidelines: contraste claro/escuro, alvos rotulados, toque 48px, fonte 2x) |
 
-_Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a implementação avança._
+_Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado._
+
+### Autoavaliação (Seção 3 da entrega)
+
+Formato da rubrica — **RF | Implementado (Sim/Não/Parcial) | Arquivo principal**. Todos os RF obrigatórios foram implementados e testados; RF06 e RF07 têm ainda a versão em nuvem (bônus) atrás da mesma interface.
+
+| RF | Implementado | Arquivo principal | Como atendemos |
+|---|:---:|---|---|
+| RF01 — Catálogo e paginação | Sim | `lib/views/catalog/catalog_view.dart` | `GridView` + "Carregar mais"; capa com placeholder (RN06) |
+| RF02 — Navegação para detalhes | Sim | `lib/core/navigation/app_routes.dart` | rota nomeada `/detail` (Navigator 1.0) |
+| RF03 — Tela de detalhes | Sim | `lib/views/detail/track_detail_view.dart` | `FutureBuilder`: capa, artista, álbum, duração |
+| RF04 — Favoritos com Provider | Sim | `lib/providers/favorites_provider.dart` | estado global reativo; coração no detalhe |
+| RF05 — Tela de favoritos | Sim | `lib/views/favorites/favorites_view.dart` | lista reativa; remoção inline |
+| RF06 — Persistência de dados | Sim | `lib/repositories/local_favorites_repository.dart` · nuvem (bônus): `cloud_favorites_repository.dart` | `shared_preferences` (baseline) + Cloud Firestore (bônus) |
+| RF07 — Login e itens ouvidos | Sim | `lib/repositories/local_auth_repository.dart` · nuvem (bônus): `firebase_auth_repository.dart` | login local (senha com hash) + Firebase Auth (bônus) |
+| RF08 — Busca | Sim | `lib/views/search/search_view.dart` | `TextField` + `TextEditingController` → endpoint `/search` → detalhe |
+| RF09 — Feedback de UI | Sim | `lib/widgets/error_view.dart` | `CircularProgressIndicator` + erro amigável; providers não travam |
+| RF10 — Acessibilidade | Sim | `lib/widgets/app_network_image.dart` | `Semantics`; contraste (claro/escuro), toque 48px e fonte 2x cobertos em `test/accessibility_test.dart` |
+
+**Configuração (Seção 2 da entrega):** tema **música** via API **Deezer** (pública, sem autenticação). Persistência: **Local** (`shared_preferences`) — bônus em **Nuvem** (Cloud Firestore). Login: **Local** — bônus com **Autenticação real** (Firebase Auth).
 
 **Fundação (PF01 tema / PF02 i18n):** infraestrutura embutida desde o início — temas Material 3 claro/escuro ([`app_theme.dart`](lib/core/theme/app_theme.dart)) e traduções PT-BR/EN gerando `AppLocalizations` ([`lib/l10n/`](lib/l10n/)). As telas de ajuste manual entram com o `SettingsProvider`.
 
