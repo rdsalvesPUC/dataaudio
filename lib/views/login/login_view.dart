@@ -78,16 +78,27 @@ class _LoginViewState extends State<LoginView> {
       await favorites.load();
       await listened.load();
       if (mounted) Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-    } on AuthException {
-      if (mounted) {
-        setState(() => _error =
-            register ? l10n.loginErrorExists : l10n.loginErrorInvalid);
-      }
+    } on AuthException catch (e) {
+      if (mounted) setState(() => _error = _messageFor(l10n, e.reason));
     } catch (_) {
       if (mounted) setState(() => _error = l10n.errorGeneric);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// Mensagem acionavel conforme o motivo da falha (P2 do review): distingue
+  /// senha fraca, e-mail invalido, rede, etc., em vez de uma unica generica.
+  String _messageFor(AppLocalizations l10n, AuthErrorReason reason) {
+    return switch (reason) {
+      AuthErrorReason.userExists => l10n.loginErrorExists,
+      AuthErrorReason.invalidCredentials => l10n.loginErrorInvalid,
+      AuthErrorReason.weakPassword => l10n.loginErrorWeakPassword,
+      AuthErrorReason.invalidEmail => l10n.loginErrorInvalidEmail,
+      AuthErrorReason.network => l10n.errorNetwork,
+      AuthErrorReason.tooManyRequests => l10n.loginErrorTooManyRequests,
+      AuthErrorReason.unknown => l10n.errorGeneric,
+    };
   }
 
   @override

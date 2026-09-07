@@ -33,7 +33,24 @@ class NotFoundException extends AppException {
   const NotFoundException([super.message = 'Nao encontrado']);
 }
 
+/// Motivo de uma falha de autenticacao — permite a UI mostrar uma mensagem
+/// acionavel (senha fraca, e-mail invalido, etc.) em vez de uma generica.
+enum AuthErrorReason {
+  invalidCredentials,
+  userExists,
+  weakPassword,
+  invalidEmail,
+  network,
+  tooManyRequests,
+  unknown,
+}
+
 /// Falha de autenticacao (credenciais invalidas, sessao expirada).
 class AuthException extends AppException {
-  const AuthException([super.message = 'Falha de autenticacao']);
+  const AuthException([
+    super.message = 'Falha de autenticacao',
+    this.reason = AuthErrorReason.unknown,
+  ]);
+
+  final AuthErrorReason reason;
 }

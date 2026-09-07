@@ -163,7 +163,7 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **102 testes** verdes; `flutter analyze` sem issues.
+- ✅ **105 testes** verdes; `flutter analyze` sem issues.
 
 ### Bônus — Firebase (RF06 nuvem + RF07 auth real)
 

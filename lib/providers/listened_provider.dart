@@ -14,9 +14,11 @@ class ListenedProvider extends ChangeNotifier {
   final List<Track> _listened = [];
   List<Track> get listened => List.unmodifiable(_listened);
 
-  /// Geracao da ultima operacao por faixa: um rollback so se aplica se nenhum
-  /// toggle mais novo assumiu aquela faixa (evita duplicar numa corrida).
-  final Map<String, int> _opGen = {};
+  // Contador global monotonico + a ultima op de cada faixa. Um rollback so se
+  // aplica se nenhuma operacao mais nova assumiu a faixa e se um `load()` nao
+  // invalidou as pendencias (ex.: troca de usuario na nuvem).
+  int _opCounter = 0;
+  final Map<String, int> _lastOp = {};
 
   bool get isEmpty => _listened.isEmpty;
 
@@ -25,6 +27,8 @@ class ListenedProvider extends ChangeNotifier {
   /// Carrega as ouvidas persistidas. Se o storage falhar, segue com a lista
   /// vazia (RF09: sem travar).
   Future<void> load() async {
+    // Invalida toggles pendentes (troca de usuario na nuvem).
+    _lastOp.clear();
     try {
       final stored = await _repository.getAll();
       _listened
@@ -42,8 +46,8 @@ class ListenedProvider extends ChangeNotifier {
   /// persistencia falhar, reverte para manter memoria e storage consistentes.
   Future<void> toggle(Track track) async {
     final id = track.id;
-    final gen = (_opGen[id] ?? 0) + 1;
-    _opGen[id] = gen;
+    final op = ++_opCounter;
+    _lastOp[id] = op;
 
     final wasListened = isListened(id);
     if (wasListened) {
@@ -59,7 +63,8 @@ class ListenedProvider extends ChangeNotifier {
         await _repository.add(track);
       }
     } catch (_) {
-      if (_opGen[id] != gen) return; // um toggle mais novo assumiu a faixa
+      // Operacao obsoleta (toggle mais novo ou load() invalidou): nao reverte.
+      if (_lastOp[id] != op) return;
       if (wasListened) {
         if (!isListened(id)) _listened.add(track);
       } else {
