@@ -6,6 +6,8 @@ import '../../core/error/app_exceptions.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/favorites_provider.dart';
+import '../../providers/listened_provider.dart';
 import '../../widgets/loading_indicator.dart';
 
 /// Tela de login (RF07). Guarda o acesso ao catalogo (RN01): so apos autenticar
@@ -39,9 +41,15 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _restore() async {
     final auth = context.read<AuthProvider>();
+    final favorites = context.read<FavoritesProvider>();
+    final listened = context.read<ListenedProvider>();
     await auth.restoreSession();
-    if (auth.isAuthenticated && mounted) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+    if (auth.isAuthenticated) {
+      // Sessao restaurada (ex.: auto-login Firebase): recarrega as listas do
+      // usuario (por-usuario na nuvem).
+      await favorites.load();
+      await listened.load();
+      if (mounted) Navigator.of(context).pushReplacementNamed(AppRoutes.home);
     }
   }
 
@@ -58,12 +66,17 @@ class _LoginViewState extends State<LoginView> {
       _error = null;
     });
     final auth = context.read<AuthProvider>();
+    final favorites = context.read<FavoritesProvider>();
+    final listened = context.read<ListenedProvider>();
     try {
       if (register) {
         await auth.register(username, password);
       } else {
         await auth.login(username, password);
       }
+      // Carrega as listas do usuario recem-autenticado (por-usuario na nuvem).
+      await favorites.load();
+      await listened.load();
       if (mounted) Navigator.of(context).pushReplacementNamed(AppRoutes.home);
     } on AuthException {
       if (mounted) {

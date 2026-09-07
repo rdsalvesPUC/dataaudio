@@ -2,6 +2,8 @@ import 'package:dataaudio/core/di/app_config.dart';
 import 'package:dataaudio/core/navigation/app_routes.dart';
 import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/providers/auth_provider.dart';
+import 'package:dataaudio/providers/favorites_provider.dart';
+import 'package:dataaudio/providers/listened_provider.dart';
 import 'package:dataaudio/views/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,6 +17,10 @@ Widget _app(AuthProvider auth, {bool useCloud = false}) => MultiProvider(
       providers: [
         Provider<AppConfig>.value(value: AppConfig(useCloud: useCloud)),
         ChangeNotifierProvider<AuthProvider>.value(value: auth),
+        ChangeNotifierProvider(
+            create: (_) => FavoritesProvider(FakeFavoritesRepository())),
+        ChangeNotifierProvider(
+            create: (_) => ListenedProvider(FakeListenedRepository())),
       ],
       child: MaterialApp(
         locale: const Locale('en'),

@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+// firebase_auth tambem exporta um `AuthProvider`; escondemos para nao colidir
+// com o nosso provider de mesmo nome.
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -9,13 +13,17 @@ import '../../providers/favorites_provider.dart';
 import '../../providers/listened_provider.dart';
 import '../../repositories/auth_repository.dart';
 import '../../repositories/catalog_repository.dart';
+import '../../repositories/cloud_favorites_repository.dart';
+import '../../repositories/cloud_listened_repository.dart';
 import '../../repositories/deezer_catalog_repository.dart';
 import '../../repositories/favorites_repository.dart';
+import '../../repositories/firebase_auth_repository.dart';
 import '../../repositories/listened_repository.dart';
 import '../../repositories/local_auth_repository.dart';
 import '../../repositories/local_favorites_repository.dart';
 import '../../repositories/local_listened_repository.dart';
 import '../../services/deezer_service.dart';
+import '../../services/firestore_service.dart';
 import '../../services/local_storage_service.dart';
 import 'app_config.dart';
 
@@ -45,11 +53,21 @@ class _CompositionRootState extends State<CompositionRoot> {
       DeezerCatalogRepository(_deezer);
 
   late final LocalStorageService _storage = LocalStorageService(widget.prefs);
-  late final FavoritesRepository _favoritesRepository =
-      LocalFavoritesRepository(_storage);
-  late final ListenedRepository _listenedRepository =
-      LocalListenedRepository(_storage);
-  late final AuthRepository _authRepository = LocalAuthRepository(_storage);
+
+  // So instanciado (via `late`) no modo nuvem — assim o baseline nao toca no
+  // Firebase (que exige inicializacao) quando `useCloud` e false.
+  late final FirestoreService _firestore =
+      FirestoreService(FirebaseFirestore.instance, FirebaseAuth.instance);
+
+  late final FavoritesRepository _favoritesRepository = widget.useCloud
+      ? CloudFavoritesRepository(_firestore)
+      : LocalFavoritesRepository(_storage);
+  late final ListenedRepository _listenedRepository = widget.useCloud
+      ? CloudListenedRepository(_firestore)
+      : LocalListenedRepository(_storage);
+  late final AuthRepository _authRepository = widget.useCloud
+      ? FirebaseAuthRepository(FirebaseAuth.instance)
+      : LocalAuthRepository(_storage);
 
   @override
   void dispose() {
