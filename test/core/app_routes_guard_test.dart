@@ -1,3 +1,4 @@
+import 'package:dataaudio/core/di/app_config.dart';
 import 'package:dataaudio/core/navigation/app_routes.dart';
 import 'package:dataaudio/l10n/app_localizations.dart';
 import 'package:dataaudio/models/track_page.dart';
@@ -26,6 +27,7 @@ Widget _app(GlobalKey<NavigatorState> navKey, AuthProvider auth) {
 
   return MultiProvider(
     providers: [
+      Provider<AppConfig>.value(value: const AppConfig(useCloud: false)),
       Provider<CatalogRepository>.value(value: catalogRepo),
       ChangeNotifierProvider(create: (_) => CatalogProvider(catalogRepo)),
       ChangeNotifierProvider(

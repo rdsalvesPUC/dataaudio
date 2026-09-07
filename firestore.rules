@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Regras de seguranca do Firestore (bonus RF06/RN07): cada usuario autenticado
+// so pode ler e escrever no seu proprio subtree users/{uid}/**. Ninguem acessa
+// os dados de outro usuario, e nao ha acesso sem autenticacao.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

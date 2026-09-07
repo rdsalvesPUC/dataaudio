@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/di/app_config.dart';
 import '../../core/error/app_exceptions.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/favorites_provider.dart';
+import '../../providers/listened_provider.dart';
 import '../../widgets/loading_indicator.dart';
 
 /// Tela de login (RF07). Guarda o acesso ao catalogo (RN01): so apos autenticar
@@ -38,9 +41,15 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _restore() async {
     final auth = context.read<AuthProvider>();
+    final favorites = context.read<FavoritesProvider>();
+    final listened = context.read<ListenedProvider>();
     await auth.restoreSession();
-    if (auth.isAuthenticated && mounted) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+    if (auth.isAuthenticated) {
+      // Sessao restaurada (ex.: auto-login Firebase): recarrega as listas do
+      // usuario (por-usuario na nuvem).
+      await favorites.load();
+      await listened.load();
+      if (mounted) Navigator.of(context).pushReplacementNamed(AppRoutes.home);
     }
   }
 
@@ -57,18 +66,20 @@ class _LoginViewState extends State<LoginView> {
       _error = null;
     });
     final auth = context.read<AuthProvider>();
+    final favorites = context.read<FavoritesProvider>();
+    final listened = context.read<ListenedProvider>();
     try {
       if (register) {
         await auth.register(username, password);
       } else {
         await auth.login(username, password);
       }
+      // Carrega as listas do usuario recem-autenticado (por-usuario na nuvem).
+      await favorites.load();
+      await listened.load();
       if (mounted) Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-    } on AuthException {
-      if (mounted) {
-        setState(() => _error =
-            register ? l10n.loginErrorExists : l10n.loginErrorInvalid);
-      }
+    } on AuthException catch (e) {
+      if (mounted) setState(() => _error = _messageFor(l10n, e.reason));
     } catch (_) {
       if (mounted) setState(() => _error = l10n.errorGeneric);
     } finally {
@@ -76,10 +87,26 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  /// Mensagem acionavel conforme o motivo da falha (P2 do review): distingue
+  /// senha fraca, e-mail invalido, rede, etc., em vez de uma unica generica.
+  String _messageFor(AppLocalizations l10n, AuthErrorReason reason) {
+    return switch (reason) {
+      AuthErrorReason.userExists => l10n.loginErrorExists,
+      AuthErrorReason.invalidCredentials => l10n.loginErrorInvalid,
+      AuthErrorReason.weakPassword => l10n.loginErrorWeakPassword,
+      AuthErrorReason.invalidEmail => l10n.loginErrorInvalidEmail,
+      AuthErrorReason.network => l10n.errorNetwork,
+      AuthErrorReason.tooManyRequests => l10n.loginErrorTooManyRequests,
+      AuthErrorReason.unknown => l10n.errorGeneric,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
+    // No modo nuvem (Firebase Auth), o login e por e-mail.
+    final useCloud = context.read<AppConfig>().useCloud;
 
     if (auth.isRestoring) {
       return const Scaffold(body: LoadingIndicator());
@@ -109,9 +136,15 @@ class _LoginViewState extends State<LoginView> {
                   TextField(
                     controller: _userController,
                     textInputAction: TextInputAction.next,
+                    keyboardType: useCloud
+                        ? TextInputType.emailAddress
+                        : TextInputType.text,
                     decoration: InputDecoration(
-                      labelText: l10n.loginUsername,
-                      prefixIcon: const Icon(Icons.person_outline),
+                      labelText:
+                          useCloud ? l10n.loginEmail : l10n.loginUsername,
+                      prefixIcon: Icon(useCloud
+                          ? Icons.alternate_email
+                          : Icons.person_outline),
                       border: const OutlineInputBorder(),
                     ),
                   ),

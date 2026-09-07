@@ -64,6 +64,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginUsername => 'Username';
 
   @override
+  String get loginEmail => 'Email';
+
+  @override
   String get loginPassword => 'Password';
 
   @override
@@ -80,6 +83,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginErrorExists => 'This username already exists.';
+
+  @override
+  String get loginErrorWeakPassword =>
+      'Password too weak (minimum 6 characters).';
+
+  @override
+  String get loginErrorInvalidEmail => 'Invalid email.';
+
+  @override
+  String get loginErrorTooManyRequests => 'Too many attempts. Try again later.';
 
   @override
   String get logout => 'Log out';

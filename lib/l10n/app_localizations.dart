@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Usuário'**
   String get loginUsername;
 
+  /// Rotulo do campo no modo nuvem (Firebase Auth usa e-mail).
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail'**
+  String get loginEmail;
+
   /// Rotulo do campo senha (RF07).
   ///
   /// In pt, this message translates to:
@@ -241,6 +247,24 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Este usuário já existe.'**
   String get loginErrorExists;
+
+  /// Senha fraca no cadastro (Firebase Auth).
+  ///
+  /// In pt, this message translates to:
+  /// **'Senha muito fraca (mínimo 6 caracteres).'**
+  String get loginErrorWeakPassword;
+
+  /// E-mail malformado (Firebase Auth).
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail inválido.'**
+  String get loginErrorInvalidEmail;
+
+  /// Rate limit do Firebase Auth.
+  ///
+  /// In pt, this message translates to:
+  /// **'Muitas tentativas. Tente mais tarde.'**
+  String get loginErrorTooManyRequests;
 
   /// Acao de encerrar a sessao (RF07).
   ///

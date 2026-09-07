@@ -54,7 +54,7 @@ class FakeAuthRepository implements AuthRepository {
   @override
   Future<AppUser> register(String username, String password) async {
     if (_users.containsKey(username)) {
-      throw const AuthException('Usuario ja existe');
+      throw const AuthException('Usuario ja existe', AuthErrorReason.userExists);
     }
     _users[username] = password;
     return _session = AppUser(id: username, username: username);
@@ -63,7 +63,8 @@ class FakeAuthRepository implements AuthRepository {
   @override
   Future<AppUser> login(String username, String password) async {
     if (_users[username] != password) {
-      throw const AuthException('Credenciais invalidas');
+      throw const AuthException(
+          'Credenciais invalidas', AuthErrorReason.invalidCredentials);
     }
     return _session = AppUser(id: username, username: username);
   }

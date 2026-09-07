@@ -4,6 +4,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Firebase (bonus): aplica o plugin google-services SO quando o
+// google-services.json existe. Assim o baseline continua independente — um
+// checkout sem a config do Firebase ainda builda normalmente (ADR-0005).
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.dataaudio.dataaudio"
     compileSdk = flutter.compileSdkVersion

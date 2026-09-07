@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/favorites_provider.dart';
+import '../../providers/listened_provider.dart';
 import '../catalog/catalog_view.dart';
 import '../favorites/favorites_view.dart';
 import '../listened/listened_view.dart';
@@ -54,7 +56,12 @@ class _HomeShellState extends State<HomeShell> {
             icon: const Icon(Icons.logout),
             tooltip: l10n.logout,
             onPressed: () async {
+              final favorites = context.read<FavoritesProvider>();
+              final listened = context.read<ListenedProvider>();
               await context.read<AuthProvider>().logout();
+              // Limpa as listas do usuario que saiu (por-usuario na nuvem).
+              await favorites.load();
+              await listened.load();
               if (context.mounted) {
                 Navigator.of(context).pushReplacementNamed(AppRoutes.login);
               }

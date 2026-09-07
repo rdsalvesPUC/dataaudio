@@ -119,4 +119,28 @@ void main() {
     expect(provider.favorites.where((t) => t.id == '1').length, 1);
     expect(provider.isFavorite('1'), isTrue);
   });
+
+  test('load invalida toggles pendentes: rollback nao corrompe o novo usuario '
+      '(Codex P1)', () async {
+    // Usuario A tem a faixa X favoritada
+    when(() => repo.getAll()).thenAnswer((_) async => [_track('X')]);
+    await provider.load();
+
+    // A desfavorita X (remocao lenta que vai FALHAR)
+    final removeCompleter = Completer<void>();
+    when(() => repo.remove('X')).thenAnswer((_) => removeCompleter.future);
+    final t1 = provider.toggle(_track('X'));
+    expect(provider.isFavorite('X'), isFalse);
+
+    // Troca de usuario: carrega os dados do usuario B (so Y)
+    when(() => repo.getAll()).thenAnswer((_) async => [_track('Y')]);
+    await provider.load();
+    expect(provider.favorites.map((t) => t.id), ['Y']);
+
+    // A remocao pendente de A falha -> rollback NAO pode re-adicionar X
+    removeCompleter.completeError(Exception('falha'));
+    await t1;
+
+    expect(provider.favorites.map((t) => t.id), ['Y']);
+  });
 }
