@@ -163,7 +163,23 @@ _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado. Atualizar conforme a
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **100 testes** verdes; `flutter analyze` sem issues.
+- ✅ **102 testes** verdes; `flutter analyze` sem issues.
+
+### Bônus — Firebase (RF06 nuvem + RF07 auth real)
+
+Atrás das **mesmas interfaces** do baseline (ADR-0005/0006), ativados por `--dart-define=USE_CLOUD=true`:
+
+- **Firebase Auth** (RF07) — login/cadastro reais por e-mail; sessão persiste (auto-login).
+- **Cloud Firestore** (RF06) — Favoritos e Ouvidas sincronizados em `users/{uid}/...`, com [regras de segurança](firestore.rules) (cada usuário só acessa os próprios dados, RN07).
+
+O baseline local segue **independente**: sem a flag, o app roda sem tocar no Firebase (o plugin `google-services` só é aplicado se o `google-services.json` existir). Segredos (`firebase_options.dart`, `google-services.json`) **não** versionados.
+
+```bash
+# baseline local
+flutter run
+# modo nuvem (exige flutterfire configure feito localmente)
+flutter run --dart-define=USE_CLOUD=true
+```
 
 ## Documentação
 

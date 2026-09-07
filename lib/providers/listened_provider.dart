@@ -31,7 +31,9 @@ class ListenedProvider extends ChangeNotifier {
         ..clear()
         ..addAll(stored);
     } catch (_) {
-      // Ignora: melhor uma lista vazia do que um crash na abertura.
+      // Sem sessao/storage indisponivel: lista vazia (nunca trava; limpa os
+      // dados do usuario anterior no modo nuvem apos logout).
+      _listened.clear();
     }
     notifyListeners();
   }
