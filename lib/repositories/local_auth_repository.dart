@@ -31,7 +31,7 @@ class LocalAuthRepository implements AuthRepository {
   Future<AppUser> register(String username, String password) async {
     final users = _readUsers();
     if (users.any((u) => u['username'] == username)) {
-      throw const AuthException('Usuario ja existe');
+      throw const AuthException('Usuario ja existe', AuthErrorReason.userExists);
     }
     final salt = _newSalt();
     users.add({
@@ -53,12 +53,14 @@ class LocalAuthRepository implements AuthRepository {
   Future<AppUser> login(String username, String password) async {
     final match = _readUsers().where((u) => u['username'] == username);
     if (match.isEmpty) {
-      throw const AuthException('Credenciais invalidas');
+      throw const AuthException(
+          'Credenciais invalidas', AuthErrorReason.invalidCredentials);
     }
     final stored = match.first;
     final ok = stored['hash'] == _hash('${stored['salt']}', password);
     if (!ok) {
-      throw const AuthException('Credenciais invalidas');
+      throw const AuthException(
+          'Credenciais invalidas', AuthErrorReason.invalidCredentials);
     }
     final user = AppUser(id: username, username: username);
     await _saveSession(user);

@@ -28,7 +28,7 @@ class FirebaseAuthRepository implements AuthRepository {
       );
       return _map(cred.user)!;
     } on FirebaseAuthException catch (e) {
-      throw AuthException(e.message ?? 'Falha ao cadastrar');
+      throw AuthException(e.message ?? 'Falha ao cadastrar', _reason(e.code));
     }
   }
 
@@ -41,9 +41,23 @@ class FirebaseAuthRepository implements AuthRepository {
       );
       return _map(cred.user)!;
     } on FirebaseAuthException catch (e) {
-      throw AuthException(e.message ?? 'Credenciais invalidas');
+      throw AuthException(e.message ?? 'Credenciais invalidas', _reason(e.code));
     }
   }
+
+  /// Traduz o `code` do Firebase para um motivo acionavel (P2 do review).
+  AuthErrorReason _reason(String code) => switch (code) {
+        'email-already-in-use' => AuthErrorReason.userExists,
+        'invalid-email' => AuthErrorReason.invalidEmail,
+        'weak-password' => AuthErrorReason.weakPassword,
+        'user-not-found' ||
+        'wrong-password' ||
+        'invalid-credential' =>
+          AuthErrorReason.invalidCredentials,
+        'network-request-failed' => AuthErrorReason.network,
+        'too-many-requests' => AuthErrorReason.tooManyRequests,
+        _ => AuthErrorReason.unknown,
+      };
 
   @override
   Future<void> logout() => _auth.signOut();
