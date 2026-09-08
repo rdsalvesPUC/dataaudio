@@ -20,5 +20,7 @@ A coluna "Tema de vídeo" indica qual ponto da Explicação Técnica (rubrica, i
 | [0012](0012-previa-de-audio-opcional.md) | Prévia de áudio (opcional) | — |
 | [0013](0013-golden-tests.md) | Validação visual: golden tests cirúrgicos | Qualidade de UI / acessibilidade |
 | [0014](0014-fluxo-git-e-ci.md) | Fluxo Git (trunk-based) e escopo do CI | Organização do projeto |
+| [0015](0015-busca-lista-de-resultados.md) | Busca (RF08): lista de resultados, não direto ao detalhe | Interpretação da rubrica / UX |
+| [0016](0016-acessibilidade-truncamento-gracioso.md) | Acessibilidade (RF10): truncamento gracioso na grade | Qualidade de UI / acessibilidade |
 
 > Referências: [`01-PRD.md`](../01-PRD.md) · [`02-SDD.md`](../02-SDD.md) · [`04-Plano-de-Testes.md`](../04-Plano-de-Testes.md)
