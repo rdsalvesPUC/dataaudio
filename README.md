@@ -211,8 +211,10 @@ flutter run --dart-define=USE_CLOUD=true
 
 ## Equipe
 
-<!-- Preencher com o nome completo de TODOS os integrantes -->
-- _A definir_
+- Eduardo Henrique Fabri
+- Joao Vitor Correa Oliveira
+- João Pedro de Souza Quintiliano da Silva
+- Rodrigo da Silva Alves
 
 ---
 
