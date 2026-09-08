@@ -153,7 +153,7 @@ Meta de cobertura: **≥ 80%** nas camadas de lógica. A estratégia completa es
 | RF07 | Login e itens ouvidos | ✅ | `lib/providers/auth_provider.dart` |
 | RF08 | Busca | ✅ | `lib/views/search/search_view.dart` |
 | RF09 | Feedback de UI | ✅ | `lib/widgets/loading_indicator.dart` + `error_view.dart` (loading/erro em catálogo, detalhe, busca e login; providers não travam) |
-| RF10 | Acessibilidade | ✅ | `test/accessibility_test.dart` (guidelines: contraste claro/escuro, alvos rotulados, toque 48px, fonte 2x) |
+| RF10 | Acessibilidade | ✅ | `test/accessibility_test.dart` (contraste claro/escuro, alvos rotulados, toque 48px, layout não quebra no 2×) |
 
 _Legenda: ⬜ pendente · 🟨 parcial · ✅ implementado._
 
@@ -170,9 +170,9 @@ Formato da rubrica — **RF | Implementado (Sim/Não/Parcial) | Arquivo principa
 | RF05 — Tela de favoritos | Sim | `lib/views/favorites/favorites_view.dart` | lista reativa; remoção inline |
 | RF06 — Persistência de dados | Sim | `lib/repositories/local_favorites_repository.dart` · nuvem (bônus): `cloud_favorites_repository.dart` | `shared_preferences` (baseline) + Cloud Firestore (bônus) |
 | RF07 — Login e itens ouvidos | Sim | `lib/repositories/local_auth_repository.dart` · nuvem (bônus): `firebase_auth_repository.dart` | login local (senha com hash) + Firebase Auth (bônus) |
-| RF08 — Busca | Sim | `lib/views/search/search_view.dart` | `TextField` + `TextEditingController` → endpoint `/search` → detalhe |
+| RF08 — Busca | Sim | `lib/views/search/search_view.dart` | `TextField` + `TextEditingController` + botão "Buscar" → endpoint `/search` → **lista de resultados** → detalhe (RF02). Design justificado em [ADR-0015](docs/adr/0015-busca-lista-de-resultados.md): busca por termo retorna N resultados, então "direto ao detalhe" é inaplicável. |
 | RF09 — Feedback de UI | Sim | `lib/widgets/error_view.dart` | `CircularProgressIndicator` + erro amigável; providers não travam |
-| RF10 — Acessibilidade | Sim | `lib/widgets/app_network_image.dart` | `Semantics`; contraste (claro/escuro), toque 48px e fonte 2x cobertos em `test/accessibility_test.dart` |
+| RF10 — Acessibilidade | Sim | `lib/widgets/app_network_image.dart` | `Semantics`/labels, contraste (claro/escuro) e toque 48px; **o layout não quebra** no 2× (sem overflow) — verificado em `test/accessibility_test.dart`. Rótulos longos na grade usam reticências (truncamento gracioso, não quebra) — [ADR-0016](docs/adr/0016-acessibilidade-truncamento-gracioso.md). |
 
 **Configuração (Seção 2 da entrega):** tema **música** via API **Deezer** (pública, sem autenticação). Persistência: **Local** (`shared_preferences`) — bônus em **Nuvem** (Cloud Firestore). Login: **Local** — bônus com **Autenticação real** (Firebase Auth).
 
@@ -206,7 +206,7 @@ flutter run --dart-define=USE_CLOUD=true
 |---|---|
 | [PRD](docs/01-PRD.md) | Requisitos de produto, critérios de aceite, escopo |
 | [SDD](docs/02-SDD.md) | Design de software, camadas, modelo de dados, diagramas |
-| [ADRs](docs/adr/README.md) | Registros de decisão de arquitetura (14 decisões) |
+| [ADRs](docs/adr/README.md) | Registros de decisão de arquitetura (16 decisões) |
 | [Plano de Testes](docs/04-Plano-de-Testes.md) | Pirâmide de testes, cobertura, fluxo TDD e CI |
 
 ## Equipe
