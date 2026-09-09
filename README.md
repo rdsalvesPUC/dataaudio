@@ -43,12 +43,9 @@ Navegue por faixas populares, busque músicas, veja detalhes, marque **Favoritos
 | **Favoritos (RF04/RF05)** | **Ouvidas (RF07)** | **Busca (RF08)** |
 | <img src="docs/screenshots/favorites.png" alt="Tela de favoritos" width="230"> | <img src="docs/screenshots/listened.png" alt="Tela de ouvidas" width="230"> | <img src="docs/screenshots/search.png" alt="Tela de busca" width="230"> |
 
-**Tema escuro (PF01 / RF10 — contraste):**
-
-<img src="docs/screenshots/catalog_dark.png" alt="Catálogo no tema escuro" width="230">
-
-<!-- Adicionar conforme implementada: ajustes (tema/idioma) -->
-_Tela de Ajustes (tema/idioma) em breve._
+| Ajustes — tema + idioma (PF01/PF02) | Tema escuro (PF01 / RF10 — contraste) |
+|:---:|:---:|
+| <img src="docs/screenshots/settings.png" alt="Tela de Ajustes: tema e idioma" width="230"> | <img src="docs/screenshots/catalog_dark.png" alt="Catálogo no tema escuro" width="230"> |
 
 ## Stack
 
@@ -176,13 +173,13 @@ Formato da rubrica — **RF | Implementado (Sim/Não/Parcial) | Arquivo principa
 
 **Configuração (Seção 2 da entrega):** tema **música** via API **Deezer** (pública, sem autenticação). Persistência: **Local** (`shared_preferences`) — bônus em **Nuvem** (Cloud Firestore). Login: **Local** — bônus com **Autenticação real** (Firebase Auth).
 
-**Fundação (PF01 tema / PF02 i18n):** infraestrutura embutida desde o início — temas Material 3 claro/escuro ([`app_theme.dart`](lib/core/theme/app_theme.dart)) e traduções PT-BR/EN gerando `AppLocalizations` ([`lib/l10n/`](lib/l10n/)). As telas de ajuste manual entram com o `SettingsProvider`.
+**Personalização (PF01 tema / PF02 i18n):** temas Material 3 claro/escuro ([`app_theme.dart`](lib/core/theme/app_theme.dart)) e traduções PT-BR/EN ([`lib/l10n/`](lib/l10n/)), embutidos desde o início. A tela de **Ajustes** ([`settings_view.dart`](lib/views/settings/settings_view.dart)) permite escolher tema (sistema/claro/escuro) e idioma (sistema/PT/EN) manualmente, via [`SettingsProvider`](lib/providers/settings_provider.dart); a escolha reflete na hora e **persiste** (RN08).
 
 ### Status geral
 
 - ✅ Ambiente e toolchain (Flutter 3.47.2, JDK 17, Android SDK 36, AVD) e scaffolding em camadas (SDD §4).
 - ✅ CI (`analyze` + `test --coverage`) em GitHub Actions.
-- ✅ **105 testes** verdes; `flutter analyze` sem issues.
+- ✅ **118 testes** verdes; `flutter analyze` sem issues.
 
 ### Bônus — Firebase (RF06 nuvem + RF07 auth real)
 

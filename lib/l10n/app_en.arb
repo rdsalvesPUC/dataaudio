@@ -33,5 +33,12 @@
   "listenedMark": "Mark as listened",
   "listenedUnmark": "Unmark listened",
   "searchButton": "Search",
-  "searchPrompt": "Search for tracks and artists."
+  "searchPrompt": "Search for tracks and artists.",
+  "settingsTheme": "Theme",
+  "settingsLanguage": "Language",
+  "settingsFollowSystem": "Follow system",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsLangPt": "Português",
+  "settingsLangEn": "English"
 }

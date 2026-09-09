@@ -1,9 +1,11 @@
 import 'package:dataaudio/core/error/app_exceptions.dart';
+import 'package:dataaudio/models/app_settings.dart';
 import 'package:dataaudio/models/app_user.dart';
 import 'package:dataaudio/models/track.dart';
 import 'package:dataaudio/repositories/auth_repository.dart';
 import 'package:dataaudio/repositories/favorites_repository.dart';
 import 'package:dataaudio/repositories/listened_repository.dart';
+import 'package:dataaudio/repositories/settings_repository.dart';
 
 /// Fakes em memoria compartilhados pelos testes de widget/provider — evitam
 /// stubbing repetitivo e modelam o comportamento real (async, idempotente).
@@ -42,6 +44,17 @@ class FakeListenedRepository implements ListenedRepository {
 
   @override
   Future<void> remove(String id) async => _items.removeWhere((t) => t.id == id);
+}
+
+class FakeSettingsRepository implements SettingsRepository {
+  FakeSettingsRepository([this._settings = const AppSettings()]);
+  AppSettings _settings;
+
+  @override
+  Future<AppSettings> load() async => _settings;
+
+  @override
+  Future<void> save(AppSettings settings) async => _settings = settings;
 }
 
 class FakeAuthRepository implements AuthRepository {
