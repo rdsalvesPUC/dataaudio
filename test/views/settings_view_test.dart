@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:dataaudio/l10n/app_localizations.dart';
+import 'package:dataaudio/models/app_settings.dart';
 import 'package:dataaudio/providers/settings_provider.dart';
 import 'package:dataaudio/views/settings/settings_view.dart';
 import 'package:flutter/material.dart';
@@ -49,5 +52,29 @@ void main() {
     expect(find.text('Theme'), findsOneWidget);
     expect(find.text('Language'), findsOneWidget);
     expect(find.text('Follow system'), findsWidgets); // tema e idioma
+  });
+
+  testWidgets('a opcao ativa expoe estado selected a leitores de tela (Codex P2)',
+      (tester) async {
+    final handle = tester.ensureSemantics();
+    final provider = SettingsProvider(
+      FakeSettingsRepository(const AppSettings(themeMode: ThemeMode.dark)),
+    )..load();
+    await tester.pumpWidget(_wrap(provider));
+    await tester.pumpAndSettle();
+
+    bool isSelected(String label) => tester
+        .getSemantics(
+          find.ancestor(of: find.text(label), matching: find.byType(ListTile)),
+        )
+            .getSemanticsData()
+            .flagsCollection
+            .isSelected ==
+        ui.Tristate.isTrue;
+
+    // A opcao ativa (Dark) anuncia-se como selecionada; uma inativa (Light) nao.
+    expect(isSelected('Dark'), isTrue);
+    expect(isSelected('Light'), isFalse);
+    handle.dispose();
   });
 }

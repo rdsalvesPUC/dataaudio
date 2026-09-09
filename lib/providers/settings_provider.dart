@@ -26,14 +26,28 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
+    final previous = _themeMode;
     _themeMode = mode;
     notifyListeners();
-    await _repository.save(AppSettings(themeMode: mode, locale: _locale));
+    try {
+      await _repository.save(AppSettings(themeMode: mode, locale: _locale));
+    } catch (_) {
+      // Persistencia falhou: reverte para nao exibir um valor nao salvo
+      // (que voltaria ao antigo no proximo restart de qualquer forma).
+      _themeMode = previous;
+      notifyListeners();
+    }
   }
 
   Future<void> setLocale(Locale? locale) async {
+    final previous = _locale;
     _locale = locale;
     notifyListeners();
-    await _repository.save(AppSettings(themeMode: _themeMode, locale: locale));
+    try {
+      await _repository.save(AppSettings(themeMode: _themeMode, locale: locale));
+    } catch (_) {
+      _locale = previous;
+      notifyListeners();
+    }
   }
 }

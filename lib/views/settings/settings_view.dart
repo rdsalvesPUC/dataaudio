@@ -90,12 +90,20 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(label),
-      trailing: selected
-          ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
-          : null,
-      onTap: onTap,
+    // `selected` marca o ListTile visualmente E expoe o estado `isSelected`
+    // aos leitores de tela (TalkBack/VoiceOver anunciam a opcao ativa), ja que
+    // o check e apenas decorativo. As opcoes formam um grupo mutuamente
+    // exclusivo, comunicado via Semantics.
+    return Semantics(
+      inMutuallyExclusiveGroup: true,
+      child: ListTile(
+        selected: selected,
+        title: Text(label),
+        trailing: selected
+            ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+            : null,
+        onTap: onTap,
+      ),
     );
   }
 }
