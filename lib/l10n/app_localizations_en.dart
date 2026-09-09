@@ -111,4 +111,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchPrompt => 'Search for tracks and artists.';
+
+  @override
+  String get settingsTheme => 'Theme';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get settingsFollowSystem => 'Follow system';
+
+  @override
+  String get settingsThemeLight => 'Light';
+
+  @override
+  String get settingsThemeDark => 'Dark';
+
+  @override
+  String get settingsLangPt => 'Português';
+
+  @override
+  String get settingsLangEn => 'English';
 }

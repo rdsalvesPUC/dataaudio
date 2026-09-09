@@ -10,6 +10,7 @@ import '../../providers/listened_provider.dart';
 import '../catalog/catalog_view.dart';
 import '../favorites/favorites_view.dart';
 import '../listened/listened_view.dart';
+import '../settings/settings_view.dart';
 
 /// Casca principal com navegacao por abas: catalogo / favoritos / ouvidas /
 /// ajustes (SDD §7). Por ora so o catalogo (RF01) esta implementado; as demais
@@ -32,7 +33,7 @@ class _HomeShellState extends State<HomeShell> {
       const CatalogView(),
       const FavoritesView(),
       const ListenedView(),
-      _Placeholder(label: l10n.navSettings),
+      const SettingsView(),
     ];
 
     final titles = <String>[
@@ -98,19 +99,6 @@ class _HomeShellState extends State<HomeShell> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _Placeholder extends StatelessWidget {
-  const _Placeholder({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(label, style: Theme.of(context).textTheme.titleLarge),
     );
   }
 }

@@ -112,4 +112,25 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get searchPrompt => 'Busque por faixas e artistas.';
+
+  @override
+  String get settingsTheme => 'Tema';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String get settingsFollowSystem => 'Seguir o sistema';
+
+  @override
+  String get settingsThemeLight => 'Claro';
+
+  @override
+  String get settingsThemeDark => 'Escuro';
+
+  @override
+  String get settingsLangPt => 'Português';
+
+  @override
+  String get settingsLangEn => 'English';
 }
