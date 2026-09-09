@@ -301,6 +301,48 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Busque por faixas e artistas.'**
   String get searchPrompt;
+
+  /// Secao de tema nos ajustes (PF01).
+  ///
+  /// In pt, this message translates to:
+  /// **'Tema'**
+  String get settingsTheme;
+
+  /// Secao de idioma nos ajustes (PF02).
+  ///
+  /// In pt, this message translates to:
+  /// **'Idioma'**
+  String get settingsLanguage;
+
+  /// Opcao de seguir o tema/idioma do sistema.
+  ///
+  /// In pt, this message translates to:
+  /// **'Seguir o sistema'**
+  String get settingsFollowSystem;
+
+  /// Opcao de tema claro (PF01).
+  ///
+  /// In pt, this message translates to:
+  /// **'Claro'**
+  String get settingsThemeLight;
+
+  /// Opcao de tema escuro (PF01).
+  ///
+  /// In pt, this message translates to:
+  /// **'Escuro'**
+  String get settingsThemeDark;
+
+  /// Nome do idioma portugues (exibido em si mesmo).
+  ///
+  /// In pt, this message translates to:
+  /// **'Português'**
+  String get settingsLangPt;
+
+  /// Nome do idioma ingles (exibido em si mesmo).
+  ///
+  /// In pt, this message translates to:
+  /// **'English'**
+  String get settingsLangEn;
 }
 
 class _AppLocalizationsDelegate

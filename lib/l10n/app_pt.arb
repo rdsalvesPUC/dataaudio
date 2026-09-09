@@ -135,5 +135,33 @@
   "searchPrompt": "Busque por faixas e artistas.",
   "@searchPrompt": {
     "description": "Estado inicial da tela de busca, antes de pesquisar (RF08)."
+  },
+  "settingsTheme": "Tema",
+  "@settingsTheme": {
+    "description": "Secao de tema nos ajustes (PF01)."
+  },
+  "settingsLanguage": "Idioma",
+  "@settingsLanguage": {
+    "description": "Secao de idioma nos ajustes (PF02)."
+  },
+  "settingsFollowSystem": "Seguir o sistema",
+  "@settingsFollowSystem": {
+    "description": "Opcao de seguir o tema/idioma do sistema."
+  },
+  "settingsThemeLight": "Claro",
+  "@settingsThemeLight": {
+    "description": "Opcao de tema claro (PF01)."
+  },
+  "settingsThemeDark": "Escuro",
+  "@settingsThemeDark": {
+    "description": "Opcao de tema escuro (PF01)."
+  },
+  "settingsLangPt": "Português",
+  "@settingsLangPt": {
+    "description": "Nome do idioma portugues (exibido em si mesmo)."
+  },
+  "settingsLangEn": "English",
+  "@settingsLangEn": {
+    "description": "Nome do idioma ingles (exibido em si mesmo)."
   }
 }

@@ -6,6 +6,7 @@ import 'package:dataaudio/providers/auth_provider.dart';
 import 'package:dataaudio/providers/catalog_provider.dart';
 import 'package:dataaudio/providers/favorites_provider.dart';
 import 'package:dataaudio/providers/listened_provider.dart';
+import 'package:dataaudio/providers/settings_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
 import 'package:dataaudio/views/home/home_shell.dart';
 import 'package:dataaudio/views/login/login_view.dart';
@@ -35,6 +36,8 @@ Widget _app(GlobalKey<NavigatorState> navKey, AuthProvider auth) {
       ChangeNotifierProvider(
           create: (_) => ListenedProvider(FakeListenedRepository())),
       ChangeNotifierProvider<AuthProvider>.value(value: auth),
+      ChangeNotifierProvider(
+          create: (_) => SettingsProvider(FakeSettingsRepository())),
     ],
     child: MaterialApp(
       navigatorKey: navKey,

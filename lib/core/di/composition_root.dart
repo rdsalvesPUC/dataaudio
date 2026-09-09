@@ -11,6 +11,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/catalog_provider.dart';
 import '../../providers/favorites_provider.dart';
 import '../../providers/listened_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../repositories/auth_repository.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../repositories/cloud_favorites_repository.dart';
@@ -22,6 +23,8 @@ import '../../repositories/listened_repository.dart';
 import '../../repositories/local_auth_repository.dart';
 import '../../repositories/local_favorites_repository.dart';
 import '../../repositories/local_listened_repository.dart';
+import '../../repositories/local_settings_repository.dart';
+import '../../repositories/settings_repository.dart';
 import '../../services/deezer_service.dart';
 import '../../services/firestore_service.dart';
 import '../../services/local_storage_service.dart';
@@ -68,6 +71,8 @@ class _CompositionRootState extends State<CompositionRoot> {
   late final AuthRepository _authRepository = widget.useCloud
       ? FirebaseAuthRepository(FirebaseAuth.instance)
       : LocalAuthRepository(_storage);
+  late final SettingsRepository _settingsRepository =
+      LocalSettingsRepository(_storage);
 
   @override
   void dispose() {
@@ -95,8 +100,9 @@ class _CompositionRootState extends State<CompositionRoot> {
         ChangeNotifierProvider(
           create: (_) => AuthProvider(_authRepository),
         ),
-        // Settings (PF01/PF02) entra aqui em seguida; o bonus troca Local*
-        // por Firebase*/Cloud* conforme `useCloud`.
+        ChangeNotifierProvider(
+          create: (_) => SettingsProvider(_settingsRepository)..load(),
+        ),
       ],
       child: widget.child,
     );
