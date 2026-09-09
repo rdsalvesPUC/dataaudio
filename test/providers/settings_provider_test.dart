@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dataaudio/models/app_settings.dart';
 import 'package:dataaudio/providers/settings_provider.dart';
 import 'package:dataaudio/repositories/settings_repository.dart';
@@ -78,5 +80,29 @@ void main() {
 
     // Assert
     expect(provider.locale, isNull);
+  });
+
+  test(
+      'escrita antiga que falha nao sobrescreve a selecao mais nova (Codex P2)',
+      () async {
+    // Arrange: a 1a gravacao (Dark) fica pendente e vai FALHAR; a 2a (Light) ok.
+    // A view dispara os setters sem await (VoidCallback), entao eles se sobrepoem.
+    final firstSave = Completer<void>();
+    final results = <Future<void>>[
+      firstSave.future, // save do Dark: controlado
+      Future<void>.value(), // save do Light: sucesso imediato
+    ];
+    var call = 0;
+    when(() => repo.save(any())).thenAnswer((_) => results[call++]);
+
+    // Act: toca Dark e, sem esperar, toca Light; depois o save do Dark falha.
+    final darkFuture = provider.setThemeMode(ThemeMode.dark);
+    final lightFuture = provider.setThemeMode(ThemeMode.light);
+    firstSave.completeError(Exception('storage indisponivel'));
+    await Future.wait([darkFuture, lightFuture]);
+
+    // Assert: Light (a mais nova, persistida) permanece — o rollback do Dark
+    // stale nao pode reverter para System.
+    expect(provider.themeMode, ThemeMode.light);
   });
 }
