@@ -5,6 +5,7 @@ import 'package:dataaudio/providers/auth_provider.dart';
 import 'package:dataaudio/providers/catalog_provider.dart';
 import 'package:dataaudio/providers/favorites_provider.dart';
 import 'package:dataaudio/providers/listened_provider.dart';
+import 'package:dataaudio/providers/settings_provider.dart';
 import 'package:dataaudio/repositories/catalog_repository.dart';
 import 'package:dataaudio/views/home/home_shell.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,9 @@ void main() {
           ),
           ChangeNotifierProvider(
             create: (_) => AuthProvider(FakeAuthRepository()),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => SettingsProvider(FakeSettingsRepository()),
           ),
         ],
         child: MaterialApp(
