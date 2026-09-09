@@ -57,4 +57,26 @@ void main() {
     await provider.setLocale(null);
     expect(provider.locale, isNull);
   });
+
+  test('setThemeMode faz rollback quando o save falha (Codex P2)', () async {
+    // Arrange: escrita da preferencia indisponivel (ex.: storage falho)
+    when(() => repo.save(any())).thenThrow(Exception('storage indisponivel'));
+
+    // Act
+    await provider.setThemeMode(ThemeMode.dark);
+
+    // Assert: nao fica exibindo um valor que nao foi persistido — reverte ja
+    expect(provider.themeMode, ThemeMode.system);
+  });
+
+  test('setLocale faz rollback quando o save falha (Codex P2)', () async {
+    // Arrange
+    when(() => repo.save(any())).thenThrow(Exception('storage indisponivel'));
+
+    // Act
+    await provider.setLocale(const Locale('pt'));
+
+    // Assert
+    expect(provider.locale, isNull);
+  });
 }
