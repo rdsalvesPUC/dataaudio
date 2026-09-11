@@ -210,7 +210,7 @@ flutter run --dart-define=USE_CLOUD=true
 
 - Eduardo Henrique Fabri
 - Joao Vitor Correa Oliveira
-- João Pedro de Souza Quintiliano da Silva
+- João Pedro Cardoso de Liz
 - Rodrigo da Silva Alves
 
 ---
