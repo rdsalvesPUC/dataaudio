@@ -74,6 +74,36 @@ void main() {
       expect(page.hasMore, isFalse);
       expect(page.tracks, isEmpty);
     });
+
+    test(
+        'hasMore=true quando a pagina veio cheia mesmo sem next '
+        '(a Deezer nao manda next em /chart) — RF01 Carregar mais', () async {
+      // Pagina cheia: data.length == limit. O /chart/0/tracks nunca retorna
+      // `next`, entao o sinal de "ha mais" e a pagina ter vindo completa.
+      const fullNoNext = '''
+      {"data": [
+        {"id": 1, "title": "T1", "artist": {"name": "A1"}, "album": {"title": "Al1"}},
+        {"id": 2, "title": "T2", "artist": {"name": "A2"}, "album": {"title": "Al2"}}
+      ], "total": 2}''';
+      stubGet(fullNoNext);
+
+      final page = await service.fetchChart(index: 0, limit: 2);
+
+      expect(page.hasMore, isTrue);
+    });
+
+    test('hasMore=false quando a pagina veio incompleta (fim do chart)',
+        () async {
+      const partial = '''
+      {"data": [
+        {"id": 1, "title": "T1", "artist": {"name": "A1"}, "album": {"title": "Al1"}}
+      ], "total": 1}''';
+      stubGet(partial);
+
+      final page = await service.fetchChart(index: 0, limit: 10);
+
+      expect(page.hasMore, isFalse);
+    });
   });
 
   group('erros (RF09/ADR-0008)', () {

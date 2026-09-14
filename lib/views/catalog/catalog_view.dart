@@ -43,42 +43,53 @@ class _CatalogViewState extends State<CatalogView> {
       );
     }
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(12),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
-        childAspectRatio: 0.72,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: catalog.tracks.length + (catalog.hasMore ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index >= catalog.tracks.length) {
-          // Falha no loadMore mantem a lista, entao o erro precisa aparecer
-          // aqui no proprio tile de "carregar mais" (RF09), nao so quando a
-          // lista esta vazia.
-          final hasLoadMoreError = catalog.error != null;
-          return _LoadMoreTile(
-            isLoading: catalog.isLoadingMore,
-            label: hasLoadMoreError ? l10n.retry : l10n.loadMore,
-            errorMessage:
-                hasLoadMoreError ? mapFailure(l10n, catalog.error) : null,
-            onPressed: catalog.loadMore,
-          );
-        }
-        final track = catalog.tracks[index];
-        return TrackGridItem(
-          track: track,
-          onTap: () => Navigator.of(context)
-              .pushNamed(AppRoutes.detail, arguments: track),
-        );
-      },
+    // Grade rolavel + botao "Carregar mais" full-width abaixo do grid (nao
+    // como uma celula): CustomScrollView compartilha o mesmo scroll.
+    final hasLoadMoreError = catalog.error != null;
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.all(12),
+          sliver: SliverGrid.builder(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 0.72,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: catalog.tracks.length,
+            itemBuilder: (context, index) {
+              final track = catalog.tracks[index];
+              return TrackGridItem(
+                track: track,
+                onTap: () => Navigator.of(context)
+                    .pushNamed(AppRoutes.detail, arguments: track),
+              );
+            },
+          ),
+        ),
+        if (catalog.hasMore)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              // Falha no loadMore mantem a lista, entao o erro aparece aqui no
+              // proprio botao (RF09), nao so quando a lista esta vazia.
+              child: _LoadMore(
+                isLoading: catalog.isLoadingMore,
+                label: hasLoadMoreError ? l10n.retry : l10n.loadMore,
+                errorMessage:
+                    hasLoadMoreError ? mapFailure(l10n, catalog.error) : null,
+                onPressed: catalog.loadMore,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
 
-class _LoadMoreTile extends StatelessWidget {
-  const _LoadMoreTile({
+class _LoadMore extends StatelessWidget {
+  const _LoadMore({
     required this.isLoading,
     required this.label,
     required this.onPressed,
@@ -92,27 +103,32 @@ class _LoadMoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) return const LoadingIndicator();
+    if (isLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: LoadingIndicator(),
+      );
+    }
 
-    final button = FilledButton.tonal(onPressed: onPressed, child: Text(label));
-    if (errorMessage == null) return Center(child: button);
+    final button = SizedBox(
+      width: double.infinity,
+      child: FilledButton.tonal(onPressed: onPressed, child: Text(label)),
+    );
+    if (errorMessage == null) return button;
 
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.error_outline,
-              color: Theme.of(context).colorScheme.error),
-          const SizedBox(height: 4),
-          Text(
-            errorMessage!,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(height: 8),
-          button,
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.error_outline, color: Theme.of(context).colorScheme.error),
+        const SizedBox(height: 4),
+        Text(
+          errorMessage!,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 8),
+        button,
+      ],
     );
   }
 }

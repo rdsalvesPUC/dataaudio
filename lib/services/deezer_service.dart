@@ -31,7 +31,7 @@ class DeezerService {
       path: '/chart/0/tracks',
       queryParameters: {'index': '$index', 'limit': '$limit'},
     );
-    return _getPage(uri);
+    return _getPage(uri, limit);
   }
 
   /// RF08 — busca por [query], tambem paginada.
@@ -40,7 +40,7 @@ class DeezerService {
       path: '/search',
       queryParameters: {'q': query, 'index': '$index', 'limit': '$limit'},
     );
-    return _getPage(uri);
+    return _getPage(uri, limit);
   }
 
   /// RF03 — detalhe de uma faixa por id.
@@ -50,14 +50,19 @@ class DeezerService {
     return Track.fromJson(json);
   }
 
-  Future<TrackPage> _getPage(Uri uri) async {
+  Future<TrackPage> _getPage(Uri uri, int limit) async {
     final json = await _getJson(uri);
     final data = (json['data'] as List?) ?? const [];
     final tracks = data
         .whereType<Map<String, dynamic>>()
         .map(Track.fromJson)
         .toList(growable: false);
-    return TrackPage(tracks: tracks, hasMore: json.containsKey('next'));
+    // `next` e confiavel na busca, mas o /chart/0/tracks nunca o envia; nesse
+    // caso o sinal de "ha mais paginas" e a pagina ter vindo cheia. Uma pagina
+    // cheia no fim exato gera no maximo uma busca extra vazia (aceitavel).
+    final hasMore = json.containsKey('next') ||
+        (tracks.isNotEmpty && tracks.length >= limit);
+    return TrackPage(tracks: tracks, hasMore: hasMore);
   }
 
   /// GET + parsing + mapeamento de erros num so lugar.

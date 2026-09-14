@@ -74,6 +74,23 @@ void main() {
     expect(find.text('No connection. Check your internet.'), findsOneWidget);
   });
 
+  testWidgets('RF01/UX: "Load more" e um botao full-width fora do grid',
+      (tester) async {
+    // Arrange: primeira pagina OK, com mais paginas
+    when(() => repo.loadChart(index: 0, limit: any(named: 'limit'))).thenAnswer(
+      (_) async => TrackPage(tracks: [_track('1')], hasMore: true),
+    );
+    await tester.pumpWidget(_wrap(CatalogProvider(repo)));
+    await tester.pumpAndSettle();
+
+    // Assert: o botao ocupa (quase) a largura da tela — nao e uma celula do
+    // grid estreita.
+    final buttonWidth =
+        tester.getSize(find.widgetWithText(FilledButton, 'Load more')).width;
+    final screenWidth = tester.getSize(find.byType(CatalogView)).width;
+    expect(buttonWidth, greaterThan(screenWidth * 0.8));
+  });
+
   testWidgets('RF09: falha no loadMore mostra erro + retry no tile (Codex #4)',
       (tester) async {
     // Arrange: primeira pagina OK, com mais paginas disponiveis
